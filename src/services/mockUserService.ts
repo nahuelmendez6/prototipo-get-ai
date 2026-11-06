@@ -28,7 +28,7 @@ export const mockUserService = {
       id: `user-${data.role}-${Date.now()}`,
       name: data.name,
       email: data.email,
-      dni: data.dni.trim(), // Contraseña inicial es su DNI
+      dni: data.dni.trim(), // Initial password is DNI
       role: data.role,
       avatar: data.avatar || `https://images.unsplash.com/photo-${data.role === 'teacher' ? '1544005313-94ddf0286df2' : '1535713875002-d1d0cf377fde'}?w=150`,
       phone: data.phone || '',
@@ -43,10 +43,10 @@ export const mockUserService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'admin',
-      userName: currentUser?.name || 'Administrador',
+      userName: currentUser?.name || 'Administrator',
       role: currentUser?.role || 'admin',
-      action: `Creó nuevo usuario (${data.role})`,
-      target: `${newUser.name} (DNI: ${newUser.dni})`,
+      action: `Created new user (${data.role})`,
+      target: `${newUser.name} (ID: ${newUser.dni})`,
       type: 'user'
     });
 
@@ -70,9 +70,9 @@ export const mockUserService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'admin',
-      userName: currentUser?.name || 'Administrador',
+      userName: currentUser?.name || 'Administrator',
       role: currentUser?.role || 'admin',
-      action: 'Actualizó información de usuario',
+      action: 'Updated user details',
       target: users[index].name,
       type: 'user'
     });
@@ -91,9 +91,9 @@ export const mockUserService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'admin',
-      userName: currentUser?.name || 'Administrador',
+      userName: currentUser?.name || 'Administrator',
       role: currentUser?.role || 'admin',
-      action: 'Eliminó usuario',
+      action: 'Deleted user',
       target: user.name,
       type: 'user'
     });

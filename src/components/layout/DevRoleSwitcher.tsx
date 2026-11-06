@@ -3,7 +3,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
 import { UserRole } from '../../types';
 import { 
-  Users, 
   RotateCcw, 
   Shield, 
   BookOpen, 
@@ -14,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export const DevRoleSwitcher: React.FC = () => {
-  const { role, currentUser, loginAsDemo } = useAuth();
+  const { role, loginAsDemo } = useAuth();
   const { resetDemoData } = useData();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -52,11 +51,11 @@ export const DevRoleSwitcher: React.FC = () => {
         >
           <div className="flex items-center gap-2">
             <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c81414] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#c81414]"></span>
             </span>
-            <span className="font-semibold text-slate-200">Modo Prototipo Demo:</span>
-            <span className="capitalize px-1.5 py-0.5 rounded bg-teal-900/60 text-teal-300 font-bold border border-teal-700/50">
+            <span className="font-semibold text-slate-200">Demo Role:</span>
+            <span className="capitalize px-2 py-0.5 rounded-md bg-[#0d3471] text-white font-bold border border-[#0d3471]/80 text-[11px]">
               {role}
             </span>
           </div>
@@ -68,7 +67,7 @@ export const DevRoleSwitcher: React.FC = () => {
           <div className="p-4 space-y-3 bg-slate-900/95 border-t border-slate-800">
             <div>
               <p className="text-[11px] font-medium text-slate-400 mb-2 uppercase tracking-wider">
-                Cambiar de Rol al Instante:
+                Quick Switch Role:
               </p>
               <div className="grid grid-cols-1 gap-1.5">
                 {demoAccounts.map(account => {
@@ -80,12 +79,12 @@ export const DevRoleSwitcher: React.FC = () => {
                       onClick={() => loginAsDemo(account.role)}
                       className={`w-full flex items-center justify-between p-2 rounded-xl transition-all cursor-pointer text-left border ${
                         isActive
-                          ? 'bg-teal-950/70 border-teal-500/80 text-white shadow-sm'
+                          ? 'bg-[#0d3471]/60 border-[#0d3471] text-white shadow-xs'
                           : 'bg-slate-800/50 border-slate-700/60 text-slate-300 hover:bg-slate-800 hover:text-white'
                       }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                        <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-[#c81414]' : 'text-slate-400'}`} />
                         <div className="truncate">
                           <p className="font-semibold text-xs leading-none truncate">{account.name}</p>
                           <p className="text-[10px] text-slate-400 mt-0.5">{account.email}</p>
@@ -104,20 +103,20 @@ export const DevRoleSwitcher: React.FC = () => {
             <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-[11px] text-slate-300 flex items-start gap-2">
               <KeyRound className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-amber-300">Regla de Acceso:</span> La contraseña inicial de cada usuario es su <strong className="text-white underline">DNI</strong>.
+                <span className="font-semibold text-amber-300">Access Rule:</span> Each user's initial password is their <strong className="text-white underline">ID (DNI)</strong>.
               </div>
             </div>
 
             {/* Reset data */}
             <div className="pt-2 border-t border-slate-800 flex justify-between items-center">
-              <span className="text-[10px] text-slate-500">¿Deseas restaurar valores iniciales?</span>
+              <span className="text-[10px] text-slate-500">Restore demo datasets?</span>
               <button
                 onClick={resetDemoData}
                 className="flex items-center gap-1.5 px-2.5 py-1 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg text-[11px] transition-colors border border-slate-700 cursor-pointer"
-                title="Restaura cursos, asignaciones y entregas iniciales"
+                title="Restores default courses, assignments, and Cambridge submissions"
               >
                 <RotateCcw className="w-3 h-3 text-slate-400" />
-                <span>Reiniciar Datos</span>
+                <span>Reset Data</span>
               </button>
             </div>
           </div>

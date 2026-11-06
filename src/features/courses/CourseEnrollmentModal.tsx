@@ -5,7 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { useData } from '../../contexts/DataContext';
 import { mockCourseService } from '../../services/mockCourseService';
 import { useToast } from '../../contexts/ToastContext';
-import { UserCheck, UserMinus, UserPlus } from 'lucide-react';
+import { UserMinus, UserPlus } from 'lucide-react';
 
 interface CourseEnrollmentModalProps {
   isOpen: boolean;
@@ -29,10 +29,10 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
     const isEnrolled = course.studentIds.includes(studentId);
     if (isEnrolled) {
       mockCourseService.unenrollStudent(course.id, studentId);
-      showToast('info', 'Alumno Desmatriculado', `${studentName} fue removido/a de ${course.name}.`);
+      showToast('info', 'Student Unenrolled', `${studentName} was removed from ${course.name}.`);
     } else {
       mockCourseService.enrollStudent(course.id, studentId);
-      showToast('success', 'Alumno Matriculado', `${studentName} fue agregado/a a ${course.name}.`);
+      showToast('success', 'Student Enrolled', `${studentName} was added to ${course.name}.`);
     }
     reloadAll();
   };
@@ -41,13 +41,13 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`Matriculación de Alumnos - ${course.name}`}
-      subtitle={`Código: ${course.code} • Total matriculados: ${course.studentIds.length}`}
+      title={`Course Enrollment - ${course.name}`}
+      subtitle={`Code: ${course.code} • Total enrolled: ${course.studentIds.length}`}
       maxWidth="xl"
     >
       <div className="space-y-4">
         <p className="text-xs text-slate-500">
-          Haz clic en Agregar o Quitar para actualizar la nómina de alumnos inscritos en este curso:
+          Click Enroll or Remove to update the student roster for this course:
         </p>
 
         <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto pr-1">
@@ -64,7 +64,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
                   />
                   <div>
                     <p className="text-xs font-bold text-slate-800">{student.name}</p>
-                    <p className="text-[11px] text-slate-500">{student.email} • DNI: {student.dni}</p>
+                    <p className="text-[11px] text-slate-500">{student.email} • ID: {student.dni}</p>
                   </div>
                 </div>
 
@@ -76,7 +76,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
                     className="text-xs text-rose-600 hover:bg-rose-50 border-rose-200 py-1"
                     icon={<UserMinus className="w-3.5 h-3.5" />}
                   >
-                    Quitar
+                    Remove
                   </Button>
                 ) : (
                   <Button
@@ -86,7 +86,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
                     className="text-xs py-1"
                     icon={<UserPlus className="w-3.5 h-3.5" />}
                   >
-                    Inscribir
+                    Enroll
                   </Button>
                 )}
               </div>
@@ -96,7 +96,7 @@ export const CourseEnrollmentModal: React.FC<CourseEnrollmentModalProps> = ({
 
         <div className="pt-4 border-t border-slate-100 flex justify-end">
           <Button variant="secondary" size="sm" onClick={onClose}>
-            Cerrar
+            Close
           </Button>
         </div>
       </div>

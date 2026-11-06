@@ -1,3 +1,6 @@
+import { CambridgeExam } from './cambridgeCriteria';
+export * from './cambridgeCriteria';
+
 export type UserRole = 'admin' | 'teacher' | 'student';
 
 export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
@@ -23,7 +26,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  dni: string; // "La contraseña inicial de cada usuario es su DNI"
+  dni: string; // Initial password is user's ID/DNI
   role: UserRole;
   avatar: string;
   phone?: string;
@@ -47,12 +50,19 @@ export interface Course {
 }
 
 export interface RubricConfig {
-  grammarWeight: number; // e.g., 20
-  vocabularyWeight: number; // 20
-  spellingPunctuationWeight: number; // 20
-  coherenceCohesionWeight: number; // 20
-  taskAchievementWeight: number; // 20
+  contentWeight: number; // e.g., 25%
+  communicativeAchievementWeight: number; // 25%
+  organisationWeight: number; // 25%
+  languageWeight: number; // 25%
+  examType?: CambridgeExam;
   customGuidelines?: string;
+
+  // Legacy compatibility weights
+  grammarWeight?: number;
+  vocabularyWeight?: number;
+  spellingPunctuationWeight?: number;
+  coherenceCohesionWeight?: number;
+  taskAchievementWeight?: number;
 }
 
 export interface Assignment {
@@ -84,12 +94,19 @@ export interface Mistake {
 }
 
 export interface EvaluationScores {
-  grammar: number; // 0 to 10
-  vocabulary: number; // 0 to 10
-  spellingPunctuation: number; // 0 to 10
-  coherenceCohesion: number; // 0 to 10
-  taskAchievement: number; // 0 to 10
-  overallGrade: number; // 0 to 10
+  content: number; // 0 to 5
+  communicativeAchievement: number; // 0 to 5
+  organisation: number; // 0 to 5
+  language: number; // 0 to 5
+  overallGrade: number; // Final Grade (0-10 or 0-20)
+  totalMarks?: number; // Cambridge total mark out of 20
+
+  // Optional legacy fields for backwards compatibility
+  grammar?: number;
+  vocabulary?: number;
+  spellingPunctuation?: number;
+  coherenceCohesion?: number;
+  taskAchievement?: number;
 }
 
 export interface Evaluation {

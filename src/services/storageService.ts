@@ -5,12 +5,12 @@ import { INITIAL_ASSIGNMENTS } from '../mocks/assignments';
 import { INITIAL_SUBMISSIONS } from '../mocks/submissions';
 
 const STORAGE_KEYS = {
-  USERS: 'ai_writing_users_v1',
-  COURSES: 'ai_writing_courses_v1',
-  ASSIGNMENTS: 'ai_writing_assignments_v1',
-  SUBMISSIONS: 'ai_writing_submissions_v1',
-  CURRENT_USER: 'ai_writing_current_user_v1',
-  ACTIVITY_LOGS: 'ai_writing_activity_logs_v1',
+  USERS: 'ai_writing_users_v2',
+  COURSES: 'ai_writing_courses_v2',
+  ASSIGNMENTS: 'ai_writing_assignments_v2',
+  SUBMISSIONS: 'ai_writing_submissions_v2',
+  CURRENT_USER: 'ai_writing_current_user_v2',
+  ACTIVITY_LOGS: 'ai_writing_activity_logs_v2',
 };
 
 const INITIAL_ACTIVITY_LOGS: ActivityLog[] = [
@@ -19,7 +19,7 @@ const INITIAL_ACTIVITY_LOGS: ActivityLog[] = [
     userId: 'user-teacher-1',
     userName: 'Prof. Laura Morales',
     role: 'teacher',
-    action: 'Publicó corrección',
+    action: 'Published assessment',
     target: 'Formal Email: Hotel Service Complaint (Carlos Gómez)',
     timestamp: '2026-10-23T14:05:00Z',
     type: 'approval',
@@ -29,7 +29,7 @@ const INITIAL_ACTIVITY_LOGS: ActivityLog[] = [
     userId: 'user-student-1',
     userName: 'Carlos Gómez',
     role: 'student',
-    action: 'Envió entrega manuscrita',
+    action: 'Submitted handwritten writing',
     target: 'FCE Essay: Advantages and Disadvantages of Remote Working',
     timestamp: '2026-10-28T16:20:00Z',
     type: 'submission',
@@ -39,7 +39,7 @@ const INITIAL_ACTIVITY_LOGS: ActivityLog[] = [
     userId: 'user-admin-1',
     userName: 'Lic. Roberto Santillán',
     role: 'admin',
-    action: 'Creó nuevo curso',
+    action: 'Created new course',
     target: 'Business English & Professional Communication',
     timestamp: '2026-10-29T11:00:00Z',
     type: 'course',
@@ -49,7 +49,7 @@ const INITIAL_ACTIVITY_LOGS: ActivityLog[] = [
     userId: 'user-student-4',
     userName: 'Elena Álvarez',
     role: 'student',
-    action: 'Envió entrega virtual',
+    action: 'Submitted online writing',
     target: 'Academic Article: Artificial Intelligence in Higher Education',
     timestamp: '2026-10-31T09:30:00Z',
     type: 'submission',
@@ -74,7 +74,7 @@ export const storageService = {
       localStorage.setItem(STORAGE_KEYS.ACTIVITY_LOGS, JSON.stringify(INITIAL_ACTIVITY_LOGS));
     }
     if (!localStorage.getItem(STORAGE_KEYS.CURRENT_USER)) {
-      // Default to Teacher for demonstration richness or Admin
+      // Default to Teacher for rich demonstration or Admin
       localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(INITIAL_USERS[1])); // Prof. Laura Morales
     }
   },
@@ -154,12 +154,8 @@ export const storageService = {
     }
   },
 
-  setCurrentUser(user: User | null) {
-    if (user) {
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
-    } else {
-      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-    }
+  setCurrentUser(user: User) {
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
   },
 
   getActivityLogs(): ActivityLog[] {
@@ -177,10 +173,11 @@ export const storageService = {
     const newLog: ActivityLog = {
       ...log,
       id: `log-${Date.now()}`,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
     logs.unshift(newLog);
-    localStorage.setItem(STORAGE_KEYS.ACTIVITY_LOGS, JSON.stringify(logs.slice(0, 50)));
-    return newLog;
+    // Keep max 50 logs
+    const trimmed = logs.slice(0, 50);
+    localStorage.setItem(STORAGE_KEYS.ACTIVITY_LOGS, JSON.stringify(trimmed));
   }
 };

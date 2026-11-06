@@ -16,7 +16,7 @@ export const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: s
       className={`inline-block animate-spin rounded-full border-teal-600 border-t-transparent ${sizeMap} ${className}`}
       role="status"
     >
-      <span className="sr-only">Cargando...</span>
+      <span className="sr-only">Loading...</span>
     </div>
   );
 };
@@ -28,10 +28,10 @@ export const AIProcessingOverlay: React.FC<{
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
-    'Digitalizando y reconociendo caligrafía / texto (OCR)...',
-    'Analizando concordancia gramatical y tiempos verbales...',
-    'Evaluando riqueza de vocabulario según estándares CEFR...',
-    'Calculando puntuación preliminar y recomendaciones docentes...',
+    'Digitizing and recognizing handwriting / text (OCR)...',
+    'Analyzing grammatical concordance and verb tenses...',
+    'Evaluating vocabulary richness against Cambridge & CEFR benchmarks...',
+    'Computing preliminary Cambridge marks and teacher suggestions...',
   ];
 
   useEffect(() => {
@@ -67,11 +67,11 @@ export const AIProcessingOverlay: React.FC<{
         </div>
 
         <h3 className="text-xl font-bold text-slate-900 flex items-center justify-center gap-2">
-          <span>Procesando Redacción</span>
+          <span>Processing Writing</span>
           <Sparkles className="w-5 h-5 text-amber-500 animate-spin" />
         </h3>
         <p className="text-xs text-slate-500 mt-1">
-          El motor de IA está analizando los errores y generando la propuesta de corrección.
+          The AI engine is analyzing errors and computing a draft assessment for teacher review.
         </p>
 
         {/* Steps visualizer */}

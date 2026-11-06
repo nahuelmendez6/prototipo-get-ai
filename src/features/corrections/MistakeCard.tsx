@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mistake } from '../../types';
-import { Edit, Trash2, ArrowRight, HelpCircle } from 'lucide-react';
+import { Edit, Trash2, ArrowRight } from 'lucide-react';
 
 interface MistakeCardProps {
   mistake: Mistake;
@@ -16,12 +16,12 @@ export const MistakeCard: React.FC<MistakeCardProps> = ({
   onDelete,
 }) => {
   const typeLabels = {
-    grammar: { label: 'Gramática', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-    vocabulary: { label: 'Vocabulario', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-    spelling: { label: 'Ortografía', bg: 'bg-amber-50 text-amber-700 border-amber-200' },
-    punctuation: { label: 'Puntuación', bg: 'bg-sky-50 text-sky-700 border-sky-200' },
-    syntax: { label: 'Sintaxis', bg: 'bg-purple-50 text-purple-700 border-purple-200' },
-    style: { label: 'Estilo / Registro', bg: 'bg-rose-50 text-rose-700 border-rose-200' },
+    grammar: { label: 'Grammar', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+    vocabulary: { label: 'Vocabulary', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    spelling: { label: 'Spelling', bg: 'bg-amber-50 text-amber-700 border-amber-200' },
+    punctuation: { label: 'Punctuation', bg: 'bg-sky-50 text-sky-700 border-sky-200' },
+    syntax: { label: 'Syntax', bg: 'bg-purple-50 text-purple-700 border-purple-200' },
+    style: { label: 'Style / Register', bg: 'bg-rose-50 text-rose-700 border-rose-200' },
   }[mistake.type] || { label: mistake.type, bg: 'bg-slate-100 text-slate-700 border-slate-200' };
 
   return (
@@ -32,7 +32,7 @@ export const MistakeCard: React.FC<MistakeCardProps> = ({
             {typeLabels.label}
           </span>
           <span className="text-[10px] text-slate-400 capitalize">
-            Impacto {mistake.impactLevel}
+            {mistake.impactLevel} impact
           </span>
         </div>
 
@@ -43,7 +43,7 @@ export const MistakeCard: React.FC<MistakeCardProps> = ({
                 type="button"
                 onClick={() => onEdit(mistake)}
                 className="p-1 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
-                title="Editar observación"
+                title="Edit feedback note"
               >
                 <Edit className="w-3.5 h-3.5" />
               </button>
@@ -53,7 +53,7 @@ export const MistakeCard: React.FC<MistakeCardProps> = ({
                 type="button"
                 onClick={() => onDelete(mistake.id)}
                 className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
-                title="Eliminar observación"
+                title="Remove feedback note"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>

@@ -11,17 +11,17 @@ export const mockAuthService = {
     const user = users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
 
     if (!user) {
-      return { success: false, error: 'Usuario no encontrado. Utilice una cuenta de demostración o verifique el correo.' };
+      return { success: false, error: 'User not found. Use a demo account or verify your email.' };
     }
 
-    // Check password: User's initial password is their DNI
+    // Check password: User's initial password is their DNI/ID
     const cleanPassword = password.trim();
     const isValid = cleanPassword === user.dni || cleanPassword === 'demo' || cleanPassword === '123456' || cleanPassword === 'admin';
 
     if (!isValid) {
       return { 
         success: false, 
-        error: `Contraseña incorrecta. Recuerde que la contraseña inicial de cada usuario es su DNI (DNI registrado: ${user.dni}).` 
+        error: `Incorrect password. Remember each user's initial password is their ID (DNI) (Registered ID: ${user.dni}).` 
       };
     }
 
@@ -30,8 +30,8 @@ export const mockAuthService = {
       userId: user.id,
       userName: user.name,
       role: user.role,
-      action: 'Inició sesión',
-      target: 'Sistema AI Writing Assistant',
+      action: 'Signed in',
+      target: 'AI Writing Platform',
       type: 'user',
     });
 
@@ -49,8 +49,8 @@ export const mockAuthService = {
       userId: user.id,
       userName: user.name,
       role: user.role,
-      action: 'Cambio rápido a rol demo',
-      target: `Rol ${role.toUpperCase()}`,
+      action: 'Switched to demo role',
+      target: `${role.toUpperCase()} Role`,
       type: 'user',
     });
     return user;
@@ -73,36 +73,36 @@ export const mockAuthService = {
         userId: current.id,
         userName: current.name,
         role: current.role,
-        action: 'Cerró sesión',
-        target: 'Plataforma',
+        action: 'Signed out',
+        target: 'Platform',
         type: 'user',
       });
     }
-    storageService.setCurrentUser(null);
+    storageService.setCurrentUser(null as any);
   },
 
   getDemoAccounts(): { role: UserRole; label: string; email: string; dni: string; description: string }[] {
     return [
       {
         role: 'admin',
-        label: 'Administrador General',
+        label: 'Lead Administrator',
         email: 'admin@demo.com',
         dni: '10000001',
-        description: 'Gestión institucional, cursos, docentes, alumnos y métricas globales.'
+        description: 'Institutional management, courses, faculty, students, and global analytics.'
       },
       {
         role: 'teacher',
-        label: 'Profesora Laura Morales',
+        label: 'Prof. Laura Morales',
         email: 'teacher@demo.com',
         dni: '20000002',
-        description: 'Revisión y edición de correcciones IA, asignaciones y retroalimentación.'
+        description: 'Review and refine AI Cambridge marking, assignment creation, and personalized feedback.'
       },
       {
         role: 'student',
-        label: 'Estudiante Carlos Gómez',
+        label: 'Student Carlos Gómez',
         email: 'student@demo.com',
         dni: '30000003',
-        description: 'Entrega manuscrita y virtual, visualización de correcciones publicadas.'
+        description: 'Handwritten and digital submissions, published evaluation reviews, and band progress.'
       }
     ];
   }

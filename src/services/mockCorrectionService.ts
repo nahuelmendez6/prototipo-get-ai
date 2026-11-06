@@ -102,9 +102,9 @@ export const mockCorrectionService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'teacher',
-      userName: currentUser?.name || 'Docente',
+      userName: currentUser?.name || 'Teacher',
       role: currentUser?.role || 'teacher',
-      action: 'Aprobó corrección docente',
+      action: 'Approved teacher evaluation',
       target: `${submissions[index].studentName} - ${submissions[index].assignmentTitle}`,
       type: 'approval'
     });
@@ -126,9 +126,9 @@ export const mockCorrectionService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'teacher',
-      userName: currentUser?.name || 'Docente',
+      userName: currentUser?.name || 'Teacher',
       role: currentUser?.role || 'teacher',
-      action: 'Publicó evaluación a alumno',
+      action: 'Published feedback and grade to student',
       target: `${submissions[index].studentName} - ${submissions[index].assignmentTitle}`,
       type: 'approval'
     });
@@ -152,9 +152,9 @@ export const mockCorrectionService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'teacher',
-      userName: currentUser?.name || 'Docente',
+      userName: currentUser?.name || 'Teacher',
       role: currentUser?.role || 'teacher',
-      action: 'Solicitó revisión de entrega',
+      action: 'Requested revision on submission',
       target: `${submissions[index].studentName} - ${submissions[index].assignmentTitle}`,
       type: 'review'
     });

@@ -11,9 +11,9 @@ import {
   UploadCloud, 
   PenTool, 
   BarChart3, 
-  Sparkles,
-  ShieldAlert,
-  Award
+  Award,
+  ShieldCheck,
+  GraduationCap
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -21,52 +21,102 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-interface NavItem {
-  to: string;
-  label: string;
-  icon: any;
-  badge?: number;
+interface NavSection {
+  title: string;
+  items: {
+    to: string;
+    label: string;
+    icon: any;
+    badge?: number;
+  }[];
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const { role, currentUser } = useAuth();
+  const { role } = useAuth();
   const { submissions } = useData();
 
   // Pending reviews count for teacher badge
-  const pendingTeacherReviews = submissions.filter(s => s.status === 'PENDING_REVIEW' || s.status === 'SUBMITTED').length;
+  const pendingTeacherReviews = submissions.filter(
+    s => s.status === 'PENDING_REVIEW' || s.status === 'SUBMITTED'
+  ).length;
 
-  const adminNav: NavItem[] = [
-    { to: '/dashboard', label: 'Panel General', icon: LayoutDashboard },
-    { to: '/courses', label: 'Gestión de Cursos', icon: BookOpen },
-    { to: '/assignments', label: 'Actividades de Writing', icon: FileText },
-    { to: '/submissions', label: 'Entregas y Evaluaciones', icon: FileCheck2 },
-    { to: '/users', label: 'Gestión de Usuarios', icon: Users },
-  ];
-
-  const teacherNav: NavItem[] = [
-    { to: '/dashboard', label: 'Mi Dashboard', icon: LayoutDashboard },
-    { to: '/courses', label: 'Mis Cursos', icon: BookOpen },
-    { to: '/assignments', label: 'Mis Consignas', icon: FileText },
-    { 
-      to: '/submissions', 
-      label: 'Correcciones y Envíos', 
-      icon: FileCheck2,
-      badge: pendingTeacherReviews > 0 ? pendingTeacherReviews : undefined 
+  const adminSections: NavSection[] = [
+    {
+      title: 'Main',
+      items: [
+        { to: '/dashboard', label: 'Overview Dashboard', icon: LayoutDashboard },
+      ],
     },
-    { to: '/submit-handwritten', label: 'Subir Manuscrito (Alumno)', icon: UploadCloud },
-    { to: '/student-progress', label: 'Progreso de Estudiantes', icon: BarChart3 },
+    {
+      title: 'Assessment & Workflow',
+      items: [
+        { to: '/submissions', label: 'Submissions Inbox', icon: FileCheck2 },
+        { to: '/assignments', label: 'Cambridge Assignments', icon: FileText },
+      ],
+    },
+    {
+      title: 'Administration',
+      items: [
+        { to: '/courses', label: 'Course Management', icon: BookOpen },
+        { to: '/users', label: 'User Management', icon: Users },
+      ],
+    },
   ];
 
-  const studentNav: NavItem[] = [
-    { to: '/dashboard', label: 'Mi Panel', icon: LayoutDashboard },
-    { to: '/courses', label: 'Mis Cursos', icon: BookOpen },
-    { to: '/assignments', label: 'Consignas Activas', icon: FileText },
-    { to: '/submit-virtual', label: 'Redacción Virtual', icon: PenTool },
-    { to: '/submit-handwritten', label: 'Entregar Manuscrito', icon: UploadCloud },
-    { to: '/my-progress', label: 'Mis Notas y Feedback', icon: Award },
+  const teacherSections: NavSection[] = [
+    {
+      title: 'Main',
+      items: [
+        { to: '/dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: 'Cambridge Assessment',
+      items: [
+        { 
+          to: '/submissions', 
+          label: 'Marking Inbox', 
+          icon: FileCheck2,
+          badge: pendingTeacherReviews > 0 ? pendingTeacherReviews : undefined 
+        },
+        { to: '/submit-handwritten', label: 'Upload Student Essay', icon: UploadCloud },
+      ],
+    },
+    {
+      title: 'Academic Management',
+      items: [
+        { to: '/assignments', label: 'Tasks & Essays', icon: FileText },
+        { to: '/courses', label: 'My Courses', icon: BookOpen },
+        { to: '/student-progress', label: 'Analytics & Students', icon: BarChart3 },
+      ],
+    },
   ];
 
-  const navItems = role === 'admin' ? adminNav : role === 'teacher' ? teacherNav : studentNav;
+  const studentSections: NavSection[] = [
+    {
+      title: 'Main',
+      items: [
+        { to: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: 'My Writings',
+      items: [
+        { to: '/assignments', label: 'Assigned Tasks', icon: FileText },
+        { to: '/submit-virtual', label: 'Online Writing Editor', icon: PenTool },
+        { to: '/submit-handwritten', label: 'Upload Handwritten Photo', icon: UploadCloud },
+        { to: '/my-progress', label: 'My Grades & Feedback', icon: Award },
+      ],
+    },
+    {
+      title: 'Academic',
+      items: [
+        { to: '/courses', label: 'My Active Courses', icon: BookOpen },
+      ],
+    },
+  ];
+
+  const sections = role === 'admin' ? adminSections : role === 'teacher' ? teacherSections : studentSections;
 
   return (
     <>
@@ -85,65 +135,83 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         }`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo brand area */}
-          <div className="h-16 flex items-center px-6 border-b border-slate-200/80 gap-3">
-            <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white shadow-xs">
-              <Sparkles className="w-4 h-4" />
+          {/* Logo brand area with Cambridge navy and crimson details */}
+          <div className="h-16 flex items-center px-5 border-b border-slate-200/80 gap-3 bg-white">
+            <div className="relative w-9 h-9 rounded-xl bg-[#0d3471] flex items-center justify-center text-white shadow-xs flex-shrink-0">
+              <GraduationCap className="w-5 h-5 text-white" />
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#c81414] rounded-full ring-2 ring-white" />
             </div>
-            <div>
-              <span className="font-bold text-slate-900 text-sm tracking-tight block">
-                AI Writing Assistant
-              </span>
-              <span className="text-[10px] text-teal-600 font-semibold tracking-wider uppercase block">
-                Educational Engine
-              </span>
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          <div className="flex-1 py-6 px-4 space-y-1.5 overflow-y-auto">
-            <div className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Menú Principal ({role.toUpperCase()})
-            </div>
-
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => onClose()}
-                  className={({ isActive }) =>
-                    `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-teal-50 text-teal-800 font-semibold shadow-xs'
-                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                    }`
-                  }
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-slate-500" />
-                    <span>{item.label}</span>
-                  </div>
-                  {item.badge !== undefined && (
-                    <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-amber-500 text-white animate-pulse">
-                      {item.badge}
-                    </span>
-                  )}
-                </NavLink>
-              );
-            })}
-          </div>
-
-          {/* Bottom Card / System Information */}
-          <div className="p-4 border-t border-slate-200/80">
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs">
-              <div className="flex items-center gap-2 text-slate-700 font-semibold mb-1">
-                <ShieldAlert className="w-3.5 h-3.5 text-teal-600" />
-                <span>Simulador Docente</span>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-slate-900 text-sm tracking-tight truncate">
+                  Cambridge AI Studio
+                </span>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
-                Las correcciones de IA requieren validación y publicación docente antes de ser visibles para alumnos.
+              <span className="text-[10px] text-[#0d3471] font-bold tracking-wider uppercase block">
+                Assessment System
+              </span>
+            </div>
+          </div>
+
+          {/* Navigation Links grouped logically */}
+          <div className="flex-1 py-4 px-3 space-y-6 overflow-y-auto">
+            {sections.map((section, idx) => (
+              <div key={idx} className="space-y-1">
+                <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  {section.title}
+                </div>
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => onClose()}
+                      className={({ isActive }) =>
+                        `group relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                          isActive
+                            ? 'bg-[#0d3471]/10 text-[#0d3471] font-semibold'
+                            : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
+                        }`
+                      }
+                    >
+                      {({ isActive }) => (
+                        <>
+                          {isActive && (
+                            <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-md bg-[#0d3471]" />
+                          )}
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <Icon
+                              className={`w-4 h-4 flex-shrink-0 transition-colors ${
+                                isActive ? 'text-[#0d3471]' : 'text-slate-400 group-hover:text-slate-700'
+                              }`}
+                            />
+                            <span className="truncate">{item.label}</span>
+                          </div>
+                          {item.badge !== undefined && (
+                            <span className="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#c81414] text-white shadow-xs animate-pulse">
+                              {item.badge}
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </NavLink>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Card / Protocol Information */}
+          <div className="p-3 border-t border-slate-200/80 bg-slate-50/50">
+            <div className="p-3 rounded-xl bg-white border border-slate-200/90 text-xs shadow-2xs">
+              <div className="flex items-center gap-2 text-slate-800 font-semibold mb-1">
+                <ShieldCheck className="w-4 h-4 text-[#0d3471]" />
+                <span className="text-[11px]">Cambridge Protocol</span>
+                <span className="ml-auto w-2 h-2 rounded-full bg-[#c81414]" title="Mandatory verification active" />
+              </div>
+              <p className="text-[10px] text-slate-500 leading-relaxed">
+                All AI evaluations require teacher verification before being published to the student.
               </p>
             </div>
           </div>

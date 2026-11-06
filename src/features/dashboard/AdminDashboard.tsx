@@ -1,24 +1,23 @@
 import React from 'react';
 import { useData } from '../../contexts/DataContext';
 import { StatCard } from '../../components/ui/StatCard';
-import { StatusBadge, CEFRBadge } from '../../components/ui/Badge';
+import { StatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { 
   Users, 
   GraduationCap, 
   BookOpen, 
-  FileCheck2, 
   Clock, 
   Plus, 
   ArrowRight,
-  TrendingUp,
   Activity,
-  Award
+  Award,
+  ShieldCheck
 } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
-  const { users, courses, assignments, submissions, activityLogs } = useData();
+  const { users, courses, submissions, activityLogs } = useData();
   const navigate = useNavigate();
 
   const students = users.filter(u => u.role === 'student');
@@ -33,71 +32,80 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      {/* Top Banner / Welcome */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 p-6 sm:p-8 rounded-3xl text-white shadow-xl shadow-purple-950/20">
-        <div>
-          <span className="text-xs uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/30">
-            Panel de Administración Institucional
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold mt-2 text-white">
-            Resumen General de Rendimiento
+      {/* Top Banner with Cambridge Navy and Crimson details */}
+      <div className="relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-gradient-to-r from-[#0d3471] via-[#0a2754] to-[#061734] p-6 sm:p-8 rounded-3xl text-white shadow-xl shadow-[#0d3471]/15">
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-[#c81414] text-white">
+              Institutional Administration
+            </span>
+            <span className="text-[11px] font-semibold text-slate-300">
+              Authorized Cambridge Centre
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+            Academic Supervision & Operations
           </h1>
-          <p className="text-sm text-slate-300 mt-1 max-w-xl">
-            Supervisa cursos, docentes, inscripciones y el flujo completo de evaluación asistida por IA en el instituto.
+          <p className="text-xs sm:text-sm text-slate-200/90 mt-1.5 max-w-xl leading-relaxed">
+            Monitor writing workflows in real time, verify compliance with teacher approval protocols, and audit course groups.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2.5">
+
+        <div className="relative z-10 flex flex-wrap items-center gap-2.5">
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate('/users')}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-xs text-xs"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/25 backdrop-blur-xs text-xs"
             icon={<Users className="w-3.5 h-3.5" />}
           >
-            Gestionar Usuarios
+            Users
           </Button>
           <Button
             variant="primary"
             size="sm"
             onClick={() => navigate('/courses')}
-            className="bg-teal-500 hover:bg-teal-600 text-white border-none text-xs"
+            className="bg-[#c81414] hover:bg-[#a31111] border-[#c81414] text-white font-bold text-xs shadow-sm"
             icon={<Plus className="w-3.5 h-3.5" />}
           >
-            Nuevo Curso
+            New Course
           </Button>
         </div>
+
+        {/* Subtle decorative glow */}
+        <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-[#c81414]/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Alumnos Inscritos"
+          title="Enrolled Students"
           value={students.length}
-          subtitle="En cursos activos"
+          subtitle="In active courses"
           icon={GraduationCap}
-          color="sky"
-          trend={{ value: '+12% este mes', positive: true }}
+          color="navy"
+          trend={{ value: '+12% this month', positive: true }}
         />
         <StatCard
-          title="Docentes a Cargo"
+          title="Teaching Staff"
           value={teachers.length}
-          subtitle="Profesores de redacción"
+          subtitle="Lead instructors"
           icon={Users}
-          color="teal"
+          color="navy"
         />
         <StatCard
-          title="Cursos Activos"
+          title="Cambridge Courses"
           value={courses.length}
-          subtitle="Cambridge & General"
+          subtitle="FCE, CAE & Advanced"
           icon={BookOpen}
-          color="indigo"
+          color="navy"
         />
         <StatCard
-          title="Correcciones Pendientes"
+          title="Pending Reviews"
           value={pendingCorrections.length}
-          subtitle="Esperando revisión docente"
+          subtitle="Awaiting teacher approval"
           icon={Clock}
-          color="amber"
+          color="crimson"
         />
       </div>
 
@@ -110,19 +118,19 @@ export const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
                 <h3 className="text-base font-bold text-slate-900">
-                  Últimas Entregas de Redacción
+                  Recent Writing Workflow
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Flujo de entregas manuscritas y virtuales en tiempo real
+                  Real-time traceability of handwritten and digital submissions
                 </p>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate('/submissions')}
-                className="text-xs font-semibold text-teal-700"
+                className="text-xs font-semibold text-[#0d3471] hover:text-[#0d3471] hover:bg-slate-50"
               >
-                <span>Ver todas</span>
+                <span>View all</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1" />
               </Button>
             </div>
@@ -141,7 +149,7 @@ export const AdminDashboard: React.FC = () => {
                         {sub.assignmentTitle}
                       </p>
                       <p className="text-[11px] text-slate-500 truncate">
-                        {sub.studentName} • {sub.courseName} • <span className="capitalize">{sub.submissionType === 'handwritten' ? 'Manuscrito' : 'Virtual'}</span>
+                        {sub.studentName} • {sub.courseName} • <span className="capitalize">{sub.submissionType === 'handwritten' ? 'Handwritten' : 'Digital'}</span>
                       </p>
                     </div>
                   </div>
@@ -154,7 +162,7 @@ export const AdminDashboard: React.FC = () => {
                       onClick={() => navigate(`/corrections/${sub.id}`)}
                       className="text-xs py-1 px-2.5"
                     >
-                      Inspeccionar
+                      Inspect
                     </Button>
                   </div>
                 </div>
@@ -164,10 +172,10 @@ export const AdminDashboard: React.FC = () => {
 
           <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
             <span className="flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-teal-600" />
-              <span>Promedio de Calificación Institucional: <strong>{avgGrade} / 10</strong></span>
+              <Award className="w-4 h-4 text-[#0d3471]" />
+              <span>Institutional Average: <strong>{avgGrade} / 10</strong></span>
             </span>
-            <span className="text-slate-400">Total acumulado: {submissions.length} entregas</span>
+            <span className="text-slate-400">Total in progress: {submissions.length} essays</span>
           </div>
         </div>
 
@@ -175,25 +183,25 @@ export const AdminDashboard: React.FC = () => {
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col">
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <Activity className="w-4 h-4 text-purple-600" />
+              <Activity className="w-4 h-4 text-[#0d3471]" />
               <h3 className="text-base font-bold text-slate-900">
-                Bitácora de Actividad
+                Live Audit Log
               </h3>
             </div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-              En vivo
+            <span className="text-[10px] uppercase font-bold text-[#c81414] tracking-wider bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+              Live
             </span>
           </div>
 
           <div className="mt-4 flex-1 space-y-4 overflow-y-auto max-h-[380px] pr-1">
             {activityLogs.map(log => (
               <div key={log.id} className="flex items-start gap-3 text-xs">
-                <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5 flex-shrink-0" />
+                <div className="w-2 h-2 rounded-full bg-[#0d3471] mt-1.5 flex-shrink-0" />
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-slate-800 leading-snug">
-                    {log.userName} <span className="font-normal text-slate-500">({log.role})</span>
+                    {log.userName} <span className="font-normal text-slate-400">({log.role})</span>
                   </p>
-                  <p className="text-[11px] text-teal-700 font-medium">
+                  <p className="text-[11px] text-[#0d3471] font-medium">
                     {log.action}: <span className="text-slate-700">{log.target}</span>
                   </p>
                   <span className="text-[10px] text-slate-400">
@@ -205,8 +213,9 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-100 text-center">
-            <p className="text-[11px] text-slate-400">
-              Registros auditables en el navegador (localStorage)
+            <p className="text-[11px] text-slate-400 flex items-center justify-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+              <span>Traceability log synced</span>
             </p>
           </div>
         </div>

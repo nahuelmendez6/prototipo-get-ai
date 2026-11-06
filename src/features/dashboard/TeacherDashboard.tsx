@@ -13,10 +13,8 @@ import {
   UploadCloud, 
   Plus, 
   Sparkles, 
-  Calendar, 
-  AlertCircle,
-  ArrowRight,
-  FileText
+  Calendar,
+  ArrowRight
 } from 'lucide-react';
 
 export const TeacherDashboard: React.FC = () => {
@@ -43,69 +41,78 @@ export const TeacherDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-teal-900 via-teal-800 to-slate-900 p-6 sm:p-8 rounded-3xl text-white shadow-xl shadow-teal-950/20">
-        <div>
-          <span className="text-xs uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-teal-500/30 text-teal-200 border border-teal-400/30">
-            Panel Docente • English Department
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold mt-2 text-white">
-            Hola, {currentUser?.name || 'Profesor/a'}
+      {/* Top Banner with Cambridge Navy and Crimson details */}
+      <div className="relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-gradient-to-r from-[#0d3471] via-[#0a2754] to-[#061734] p-6 sm:p-8 rounded-3xl text-white shadow-xl shadow-[#0d3471]/15">
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-[#c81414] text-white">
+              Teacher Dashboard
+            </span>
+            <span className="text-[11px] font-semibold text-slate-300">
+              Cambridge Assessment Centre
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+            Welcome, {currentUser?.name || 'Teacher'}
           </h1>
-          <p className="text-sm text-teal-100/80 mt-1 max-w-xl">
-            Gestiona tus cursos, revisa las correcciones generadas por IA, edita feedback pedagógico y publica notas.
+          <p className="text-xs sm:text-sm text-slate-200/90 mt-1.5 max-w-xl leading-relaxed">
+            Manage your writing classes, review AI pre-evaluations against Cambridge criteria, and publish approved marks.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2.5">
+
+        <div className="relative z-10 flex flex-wrap items-center gap-2.5">
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate('/submit-handwritten')}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-xs text-xs"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/25 backdrop-blur-xs text-xs"
             icon={<UploadCloud className="w-3.5 h-3.5" />}
           >
-            Subir Foto Manuscrita
+            Upload Handwritten Essay
           </Button>
           <Button
             variant="primary"
             size="sm"
             onClick={() => navigate('/assignments')}
-            className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold border-none text-xs"
+            className="bg-[#c81414] hover:bg-[#a31111] border-[#c81414] text-white font-bold text-xs shadow-sm"
             icon={<Plus className="w-3.5 h-3.5" />}
           >
-            Nueva Consigna
+            New Assignment
           </Button>
         </div>
+
+        {/* Subtle decorative glow */}
+        <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-[#c81414]/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Mis Cursos Asignados"
+          title="Assigned Courses"
           value={myCourses.length}
-          subtitle="Grupos activos"
+          subtitle="Active cohorts"
           icon={BookOpen}
-          color="teal"
+          color="navy"
         />
         <StatCard
-          title="Estudiantes Activos"
+          title="Active Students"
           value={totalStudents}
-          subtitle="Alumnos a cargo"
+          subtitle="Enrolled students"
           icon={Users}
-          color="sky"
+          color="navy"
         />
         <StatCard
-          title="Pendientes de Revisión"
+          title="Pending Reviews"
           value={pendingReviewSubmissions.length}
-          subtitle="IA ha sugerido corrección"
+          subtitle="Awaiting teacher validation"
           icon={Sparkles}
-          color="amber"
-          trend={{ value: `${pendingReviewSubmissions.length} listas`, positive: false }}
+          color="crimson"
+          trend={{ value: `${pendingReviewSubmissions.length} to review`, positive: pendingReviewSubmissions.length === 0 }}
         />
         <StatCard
-          title="Correcciones Publicadas"
+          title="Published Grades"
           value={publishedSubmissions.length}
-          subtitle="Visibles para los alumnos"
+          subtitle="Visible to students"
           icon={CheckCircle}
           color="emerald"
         />
@@ -119,52 +126,54 @@ export const TeacherDashboard: React.FC = () => {
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
             <div>
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#c81414] animate-pulse" />
                 <h3 className="text-base font-bold text-slate-900">
-                  Entregas que requieren tu Revisión
+                  Submissions Requiring Teacher Review
                 </h3>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                La IA ha analizado estas producciones. Revisa, edita las notas y aprueba para publicar.
+                AI has evaluated these texts. Validate Cambridge rubrics, add feedback, and publish.
               </p>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => navigate('/submissions')}
-              className="text-xs font-semibold text-teal-700"
+              className="text-xs font-semibold text-[#0d3471] hover:text-[#0d3471] hover:bg-slate-50"
             >
-              Ver todas ({mySubmissions.length})
+              View all ({mySubmissions.length})
             </Button>
           </div>
 
           <div className="mt-4 space-y-3">
             {pendingReviewSubmissions.length === 0 ? (
               <div className="text-center py-8 text-slate-400 text-xs">
-                No tienes correcciones pendientes de revisión en este momento.
+                No pending submissions to review. All assessments are up to date!
               </div>
             ) : (
               pendingReviewSubmissions.map(sub => (
                 <div
                   key={sub.id}
-                  className="p-4 rounded-2xl border border-slate-200 hover:border-teal-300 hover:bg-teal-50/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="p-4 rounded-2xl border border-slate-200 hover:border-slate-300 hover:shadow-2xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="flex items-start gap-3">
                     <img
                       src={sub.studentAvatar}
                       alt={sub.studentName}
-                      className="w-11 h-11 rounded-xl object-cover ring-1 ring-slate-200 flex-shrink-0"
+                      className="w-10 h-10 rounded-xl object-cover ring-1 ring-slate-200 flex-shrink-0"
                     />
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-slate-900">{sub.studentName}</span>
-                        <span className="text-[10px] text-slate-400">({sub.submissionType === 'handwritten' ? 'Manuscrito' : 'Virtual'})</span>
+                        <span className="text-[10px] text-slate-400">
+                          ({sub.submissionType === 'handwritten' ? 'Handwritten' : 'Digital'})
+                        </span>
                       </div>
-                      <p className="text-xs font-medium text-slate-700 mt-0.5">
+                      <p className="text-xs font-semibold text-slate-800 mt-0.5">
                         {sub.assignmentTitle}
                       </p>
                       <p className="text-[11px] text-slate-500">
-                        {sub.courseName} • {sub.wordCount} palabras
+                        {sub.courseName} • {sub.wordCount} words
                       </p>
                     </div>
                   </div>
@@ -175,10 +184,10 @@ export const TeacherDashboard: React.FC = () => {
                       variant="primary"
                       size="sm"
                       onClick={() => navigate(`/corrections/${sub.id}`)}
-                      className="text-xs bg-teal-600 hover:bg-teal-700 text-white font-semibold py-1.5 px-3"
+                      className="text-xs font-semibold py-1.5 px-3"
                       icon={<Sparkles className="w-3.5 h-3.5 text-amber-300" />}
                     >
-                      Revisar Corrección IA
+                      Review Assessment
                     </Button>
                   </div>
                 </div>
@@ -192,28 +201,28 @@ export const TeacherDashboard: React.FC = () => {
           <div>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-teal-600" />
+                <Calendar className="w-4 h-4 text-[#0d3471]" />
                 <h3 className="text-base font-bold text-slate-900">
-                  Próximos Vencimientos
+                  Upcoming Due Dates
                 </h3>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate('/assignments')}
-                className="text-xs font-semibold text-teal-700"
+                className="text-xs font-semibold text-[#0d3471] hover:text-[#0d3471]"
               >
-                Gestionar
+                Manage
               </Button>
             </div>
 
             <div className="mt-4 space-y-3">
               {myAssignments.slice(0, 4).map(asg => (
-                <div key={asg.id} className="p-3 rounded-xl border border-slate-100 bg-slate-50/60 hover:bg-slate-50 transition-colors">
+                <div key={asg.id} className="p-3 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 transition-colors">
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <CEFRBadge level={asg.cefrLevel} />
                     <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-amber-600" />
+                      <Clock className="w-3 h-3 text-slate-400" />
                       <span>{new Date(asg.dueDate).toLocaleDateString()}</span>
                     </span>
                   </div>
@@ -230,9 +239,9 @@ export const TeacherDashboard: React.FC = () => {
               size="sm"
               onClick={() => navigate('/student-progress')}
               className="w-full text-xs font-semibold text-slate-700 justify-center"
-              icon={<Users className="w-3.5 h-3.5" />}
+              icon={<Users className="w-3.5 h-3.5 text-[#0d3471]" />}
             >
-              Ver Rendimiento General de Alumnos
+              View Performance Analytics
             </Button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
-import { Course, CEFRLevel } from '../../types';
+import { Course } from '../../types';
 import { CEFRBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { CourseModal } from './CourseModal';
@@ -15,7 +15,6 @@ import {
   Plus, 
   Users, 
   Clock, 
-  MoreVertical, 
   Edit, 
   Trash2, 
   UserPlus, 
@@ -57,9 +56,9 @@ export const CourseListPage: React.FC = () => {
   }
 
   const handleDeleteCourse = (id: string, name: string) => {
-    if (confirm(`¿Estás seguro de eliminar el curso "${name}"?`)) {
+    if (confirm(`Are you sure you want to delete course "${name}"?`)) {
       mockCourseService.deleteCourse(id);
-      showToast('info', 'Curso Eliminado', `El curso "${name}" fue eliminado.`);
+      showToast('info', 'Course Deleted', `Course "${name}" was deleted.`);
       reloadAll();
     }
   };
@@ -70,14 +69,14 @@ export const CourseListPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
-            {role === 'admin' ? 'Gestión de Cursos y Grupos' : 'Cursos y Programas'}
+            {role === 'admin' ? 'Courses & Class Management' : 'Academic Courses & Programs'}
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             {role === 'admin'
-              ? 'Administra planes de estudio, asignación docente y nómina de matriculaciones.'
+              ? 'Manage study programs, assigned faculty, and enrolled student rosters.'
               : role === 'teacher'
-              ? 'Visualiza tus comisiones asignadas, estudiantes matriculados y sus producciones.'
-              : 'Tus cursos activos y talleres de redacción matriculados.'}
+              ? 'View your assigned courses, enrolled students, and writing activities.'
+              : 'Your active courses and Cambridge writing modules.'}
           </p>
         </div>
 
@@ -91,7 +90,7 @@ export const CourseListPage: React.FC = () => {
             }}
             icon={<Plus className="w-4 h-4" />}
           >
-            Nuevo Curso
+            New Course
           </Button>
         )}
       </div>
@@ -104,14 +103,14 @@ export const CourseListPage: React.FC = () => {
             type="text"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            placeholder="Buscar por nombre, código o docente..."
+            placeholder="Search by course name, code, or teacher..."
             className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
           />
         </div>
 
         {/* CEFR Level filter pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-          <span className="text-xs text-slate-400 font-semibold mr-1">Nivel:</span>
+          <span className="text-xs text-slate-400 font-semibold mr-1">Level:</span>
           {['all', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(lvl => (
             <button
               key={lvl}
@@ -122,7 +121,7 @@ export const CourseListPage: React.FC = () => {
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              {lvl === 'all' ? 'Todos' : lvl}
+              {lvl === 'all' ? 'All' : lvl}
             </button>
           ))}
         </div>
@@ -156,7 +155,7 @@ export const CourseListPage: React.FC = () => {
               <div className="mt-4 pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="w-4 h-4 text-teal-600 flex-shrink-0" />
-                  <span className="truncate"><strong>Docente:</strong> {course.teacherName}</span>
+                  <span className="truncate"><strong>Teacher:</strong> {course.teacherName}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-slate-400 flex-shrink-0" />
@@ -164,7 +163,7 @@ export const CourseListPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-indigo-500 flex-shrink-0" />
-                  <span><strong>{course.studentIds.length}</strong> alumnos matriculados</span>
+                  <span><strong>{course.studentIds.length}</strong> students enrolled</span>
                 </div>
               </div>
             </div>
@@ -177,7 +176,7 @@ export const CourseListPage: React.FC = () => {
                 onClick={() => navigate(`/courses/${course.id}`)}
                 className="text-xs py-1.5 flex-1 justify-center"
               >
-                <span>Ver Detalles</span>
+                <span>View Details</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1" />
               </Button>
 
@@ -186,7 +185,7 @@ export const CourseListPage: React.FC = () => {
                   <button
                     onClick={() => setEnrollmentModalCourse(course)}
                     className="p-1.5 text-slate-500 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
-                    title="Matricular Alumnos"
+                    title="Enroll Students"
                   >
                     <UserPlus className="w-4 h-4" />
                   </button>
@@ -196,14 +195,14 @@ export const CourseListPage: React.FC = () => {
                       setIsModalOpen(true);
                     }}
                     className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                    title="Editar Curso"
+                    title="Edit Course"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDeleteCourse(course.id, course.name)}
                     className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                    title="Eliminar Curso"
+                    title="Delete Course"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -217,8 +216,8 @@ export const CourseListPage: React.FC = () => {
       {visibleCourses.length === 0 && (
         <div className="text-center py-12 bg-white rounded-2xl border border-slate-200">
           <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-          <h3 className="text-sm font-semibold text-slate-700">No se encontraron cursos</h3>
-          <p className="text-xs text-slate-400 mt-1">Ajusta los filtros de búsqueda o nivel CEFR.</p>
+          <h3 className="text-sm font-semibold text-slate-700">No courses found</h3>
+          <p className="text-xs text-slate-400 mt-1">Adjust search terms or CEFR filters.</p>
         </div>
       )}
 

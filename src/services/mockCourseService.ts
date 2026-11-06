@@ -32,9 +32,9 @@ export const mockCourseService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'admin',
-      userName: currentUser?.name || 'Administrador',
+      userName: currentUser?.name || 'Administrator',
       role: currentUser?.role || 'admin',
-      action: 'Creó curso',
+      action: 'Created course',
       target: newCourse.name,
       type: 'course'
     });
@@ -53,9 +53,9 @@ export const mockCourseService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'admin',
-      userName: currentUser?.name || 'Administrador',
+      userName: currentUser?.name || 'Administrator',
       role: currentUser?.role || 'admin',
-      action: 'Actualizó curso',
+      action: 'Updated course',
       target: courses[index].name,
       type: 'course'
     });
@@ -74,9 +74,9 @@ export const mockCourseService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'admin',
-      userName: currentUser?.name || 'Administrador',
+      userName: currentUser?.name || 'Administrator',
       role: currentUser?.role || 'admin',
-      action: 'Eliminó curso',
+      action: 'Deleted course',
       target: course.name,
       type: 'course'
     });

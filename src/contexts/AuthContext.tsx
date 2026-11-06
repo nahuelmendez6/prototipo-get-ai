@@ -29,10 +29,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const result = mockAuthService.login(email, password);
     if (result.success && result.user) {
       setCurrentUser(result.user);
-      showToast('success', 'Sesión iniciada', `Bienvenido/a, ${result.user.name} (${result.user.role.toUpperCase()})`);
+      showToast('success', 'Signed In', `Welcome, ${result.user.name} (${result.user.role.toUpperCase()})`);
       return true;
     } else {
-      showToast('error', 'Error al iniciar sesión', result.error || 'Credenciales inválidas');
+      showToast('error', 'Sign In Failed', result.error || 'Invalid credentials');
       return false;
     }
   };
@@ -40,21 +40,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginAsDemo = useCallback((role: UserRole) => {
     const user = mockAuthService.loginAsDemo(role);
     setCurrentUser(user);
-    showToast('info', 'Cambio de Rol Activo', `Ahora estás interactuando como ${user.name} (${user.role.toUpperCase()})`);
+    showToast('info', 'Active Role Changed', `Now acting as ${user.name} (${user.role.toUpperCase()})`);
   }, [showToast]);
 
   const switchUser = useCallback((userId: string) => {
     const user = mockAuthService.switchUser(userId);
     if (user) {
       setCurrentUser(user);
-      showToast('info', 'Usuario Cambiado', `Sesión activa: ${user.name} (${user.role.toUpperCase()})`);
+      showToast('info', 'User Switched', `Active session: ${user.name} (${user.role.toUpperCase()})`);
     }
   }, [showToast]);
 
   const logout = useCallback(() => {
     mockAuthService.logout();
     setCurrentUser(null);
-    showToast('info', 'Sesión finalizada', 'Has cerrado sesión correctamente.');
+    showToast('info', 'Signed Out', 'You have been signed out successfully.');
   }, [showToast]);
 
   const role: UserRole = currentUser?.role || 'student';

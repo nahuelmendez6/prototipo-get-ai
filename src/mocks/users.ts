@@ -52,7 +52,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'user-student-2',
     name: 'Sofía Rossi',
-    email: 'sofia.rossi@alumnos.edu',
+    email: 'sofia.rossi@students.edu',
     dni: '38123456',
     role: 'student',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
@@ -64,7 +64,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'user-student-3',
     name: 'Mateo Benítez',
-    email: 'mateo.benitez@alumnos.edu',
+    email: 'mateo.benitez@students.edu',
     dni: '39654321',
     role: 'student',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
@@ -76,7 +76,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'user-student-4',
     name: 'Elena Álvarez',
-    email: 'elena.alvarez@alumnos.edu',
+    email: 'elena.alvarez@students.edu',
     dni: '40112233',
     role: 'student',
     avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
@@ -88,7 +88,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'user-student-5',
     name: 'Lucas Romero',
-    email: 'lucas.romero@alumnos.edu',
+    email: 'lucas.romero@students.edu',
     dni: '41887766',
     role: 'student',
     avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80',

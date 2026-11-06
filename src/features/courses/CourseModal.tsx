@@ -26,7 +26,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
   const [level, setLevel] = useState<CEFRLevel>('B2');
   const [teacherId, setTeacherId] = useState('');
   const [schedule, setSchedule] = useState('');
-  const [academicPeriod, setAcademicPeriod] = useState('Ciclo Lectivo 2026');
+  const [academicPeriod, setAcademicPeriod] = useState('Academic Year 2026');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
@@ -43,8 +43,8 @@ export const CourseModal: React.FC<CourseModalProps> = ({
       setCode(`ENG-${Date.now().toString().slice(-4)}`);
       setLevel('B2');
       setTeacherId(teachers[0]?.id || '');
-      setSchedule('Lunes y Miércoles 18:30 - 20:00');
-      setAcademicPeriod('Ciclo 2026 - Cuatrimestre 1');
+      setSchedule('Mondays & Wednesdays 18:30 - 20:00');
+      setAcademicPeriod('Term 1 - 2026');
       setDescription('');
     }
   }, [courseToEdit, isOpen, teachers]);
@@ -52,7 +52,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const selectedTeacher = teachers.find(t => t.id === teacherId);
-    const teacherName = selectedTeacher?.name || 'Profesor Asignado';
+    const teacherName = selectedTeacher?.name || 'Assigned Instructor';
 
     if (courseToEdit) {
       mockCourseService.updateCourse(courseToEdit.id, {
@@ -65,7 +65,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
         academicPeriod,
         description,
       });
-      showToast('success', 'Curso Actualizado', `El curso "${name}" ha sido actualizado.`);
+      showToast('success', 'Course Updated', `Course "${name}" was updated.`);
     } else {
       mockCourseService.createCourse({
         name,
@@ -78,7 +78,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
         academicPeriod,
         description,
       });
-      showToast('success', 'Curso Creado', `El curso "${name}" ha sido creado con éxito.`);
+      showToast('success', 'Course Created', `Course "${name}" was created successfully.`);
     }
 
     reloadAll();
@@ -89,56 +89,56 @@ export const CourseModal: React.FC<CourseModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={courseToEdit ? 'Editar Curso' : 'Crear Nuevo Curso'}
-      subtitle="Define el nivel CEFR, el docente titular y la descripción pedagógica."
+      title={courseToEdit ? 'Edit Course' : 'Create New Course'}
+      subtitle="Define CEFR standard, lead teacher, schedule, and course syllabus."
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Nombre del Curso</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">Course Name</label>
           <input
             type="text"
             required
             value={name}
             onChange={e => setName(e.target.value)}
-            placeholder="ej. Cambridge B2 First (FCE) - Preparación"
+            placeholder="e.g. Cambridge B2 First (FCE) - Preparation"
             className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Código del Curso</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Course Code</label>
             <input
               type="text"
               required
               value={code}
               onChange={e => setCode(e.target.value)}
-              placeholder="ej. FCE-B2-01"
+              placeholder="e.g. FCE-B2-01"
               className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white font-mono text-xs"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Nivel Marco Común Europeo (CEFR)</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">CEFR Level</label>
             <select
               value={level}
               onChange={e => setLevel(e.target.value as CEFRLevel)}
               className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
             >
-              <option value="A1">A1 - Inicial / Breakthrough</option>
-              <option value="A2">A2 - Elemental / Waystage</option>
-              <option value="B1">B1 - Intermedio / Threshold</option>
-              <option value="B2">B2 - Intermedio Alto / Vantage</option>
-              <option value="C1">C1 - Avanzado / Effective Operational</option>
-              <option value="C2">C2 - Maestría / Mastery</option>
+              <option value="A1">A1 - Beginner (Breakthrough)</option>
+              <option value="A2">A2 - Elementary (Waystage)</option>
+              <option value="B1">B1 - Intermediate (PET / Threshold)</option>
+              <option value="B2">B2 - Upper Intermediate (FCE / Vantage)</option>
+              <option value="C1">C1 - Advanced (CAE / Effective Operational)</option>
+              <option value="C2">C2 - Proficiency (CPE / Mastery)</option>
             </select>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Docente Asignado</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Lead Instructor</label>
             <select
               value={teacherId}
               onChange={e => setTeacherId(e.target.value)}
@@ -154,20 +154,20 @@ export const CourseModal: React.FC<CourseModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Horario y Días</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Schedule & Days</label>
             <input
               type="text"
               required
               value={schedule}
               onChange={e => setSchedule(e.target.value)}
-              placeholder="ej. Lunes y Miércoles 18:30 - 20:00"
+              placeholder="e.g. Mondays & Wednesdays 18:30 - 20:00"
               className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Período Académico</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">Academic Period</label>
           <input
             type="text"
             required
@@ -178,22 +178,22 @@ export const CourseModal: React.FC<CourseModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Descripción / Objetivos</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">Description / Syllabus</label>
           <textarea
             rows={3}
             value={description}
             onChange={e => setDescription(e.target.value)}
-            placeholder="Objetivos pedagógicos, formato de examen Cambridge o contenido temático."
+            placeholder="Course syllabus, target Cambridge exam, or writing genres covered."
             className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
           />
         </div>
 
         <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
           <Button type="button" variant="outline" size="sm" onClick={onClose}>
-            Cancelar
+            Cancel
           </Button>
           <Button type="submit" variant="primary" size="sm">
-            {courseToEdit ? 'Guardar Cambios' : 'Crear Curso'}
+            {courseToEdit ? 'Save Changes' : 'Create Course'}
           </Button>
         </div>
       </form>

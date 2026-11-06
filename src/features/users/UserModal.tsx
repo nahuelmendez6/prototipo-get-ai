@@ -47,7 +47,7 @@ export const UserModal: React.FC<UserModalProps> = ({
     e.preventDefault();
 
     if (!dni.trim()) {
-      showToast('error', 'DNI Requerido', 'El DNI es obligatorio ya que constituye la contraseña inicial del usuario.');
+      showToast('error', 'ID / DNI Required', 'The ID (DNI) is mandatory as it serves as the user\'s initial password.');
       return;
     }
 
@@ -59,7 +59,7 @@ export const UserModal: React.FC<UserModalProps> = ({
         role,
         phone,
       });
-      showToast('success', 'Usuario Actualizado', `Los datos de ${name} fueron actualizados.`);
+      showToast('success', 'User Updated', `Account details for ${name} were updated successfully.`);
     } else {
       mockUserService.createUser({
         name,
@@ -70,8 +70,8 @@ export const UserModal: React.FC<UserModalProps> = ({
       });
       showToast(
         'success',
-        'Usuario Creado Exitosamente',
-        `Usuario registrado. Contraseña inicial asignada: DNI (${dni.trim()})`
+        'User Created Successfully',
+        `User registered. Initial password assigned: ID (${dni.trim()})`
       );
     }
 
@@ -83,8 +83,8 @@ export const UserModal: React.FC<UserModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={userToEdit ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}
-      subtitle="Define los datos institucionales, rol y documento de identidad del usuario."
+      title={userToEdit ? 'Edit User' : 'Register New User'}
+      subtitle="Set institutional profile, role, and identity document for platform access."
       maxWidth="md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -92,21 +92,21 @@ export const UserModal: React.FC<UserModalProps> = ({
         <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-start gap-2.5">
           <KeyRound className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
           <div className="text-xs text-amber-900 leading-relaxed">
-            <span className="font-bold">Política de Credenciales:</span>
+            <span className="font-bold">Credentials Policy:</span>
             <p className="mt-0.5 text-amber-800">
-              La contraseña inicial de cada usuario es su <strong>DNI</strong>. Asegúrate de ingresarlo correctamente.
+              Each user's initial password is their <strong>ID (DNI)</strong>. Ensure it is entered accurately.
             </p>
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Nombre Completo</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
           <input
             type="text"
             required
             value={name}
             onChange={e => setName(e.target.value)}
-            placeholder="ej. Lic. Mariana Torres / Juan Pérez"
+            placeholder="e.g. Prof. Emily Watson / John Davis"
             className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
           />
         </div>
@@ -114,47 +114,47 @@ export const UserModal: React.FC<UserModalProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
-              DNI (Contraseña Inicial)
+              ID / DNI (Initial Password)
             </label>
             <input
               type="text"
               required
               value={dni}
               onChange={e => setDni(e.target.value)}
-              placeholder="ej. 38450123"
+              placeholder="e.g. 38450123"
               className="w-full px-3 py-2 text-xs font-mono font-bold rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Rol en el Instituto</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Institutional Role</label>
             <select
               value={role}
               onChange={e => setRole(e.target.value as UserRole)}
               className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white font-medium"
             >
-              <option value="student">Estudiante (Student)</option>
-              <option value="teacher">Docente (Teacher)</option>
-              <option value="admin">Administrador (Admin)</option>
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+              <option value="admin">Administrator</option>
             </select>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Correo Institucional</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Institutional Email</label>
             <input
               type="email"
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="usuario@instituto.edu"
+              placeholder="user@institute.edu"
               className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Teléfono de Contacto</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Contact Phone</label>
             <input
               type="text"
               value={phone}
@@ -167,10 +167,10 @@ export const UserModal: React.FC<UserModalProps> = ({
 
         <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
           <Button type="button" variant="outline" size="sm" onClick={onClose}>
-            Cancelar
+            Cancel
           </Button>
           <Button type="submit" variant="primary" size="sm">
-            {userToEdit ? 'Guardar Cambios' : 'Registrar Usuario'}
+            {userToEdit ? 'Save Changes' : 'Create User'}
           </Button>
         </div>
       </form>

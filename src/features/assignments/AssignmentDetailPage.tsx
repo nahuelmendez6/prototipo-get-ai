@@ -4,16 +4,13 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
 import { CEFRBadge, StatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { getExamTypeFromLevel, CAMBRIDGE_CRITERIA, CambridgeExam } from '../../types';
 import { 
   ArrowLeft, 
-  Calendar, 
-  Clock, 
-  BookOpen, 
   UploadCloud, 
   PenTool, 
   FileCheck2, 
-  Sparkles,
-  AlertCircle
+  BookOpen
 } from 'lucide-react';
 
 export const AssignmentDetailPage: React.FC = () => {
@@ -27,9 +24,9 @@ export const AssignmentDetailPage: React.FC = () => {
   if (!assignment) {
     return (
       <div className="text-center py-12">
-        <p className="text-sm text-slate-500">Consigna no encontrada.</p>
+        <p className="text-sm text-slate-500">Assignment not found.</p>
         <Button variant="outline" size="sm" onClick={() => navigate('/assignments')} className="mt-3">
-          Volver a Consignas
+          Back to Assignments
         </Button>
       </div>
     );
@@ -40,6 +37,11 @@ export const AssignmentDetailPage: React.FC = () => {
   // All submissions for this assignment (for teacher / admin)
   const assignmentSubmissions = submissions.filter(s => s.assignmentId === assignment.id);
 
+  const examType: CambridgeExam = (assignment.rubric.examType === 'CAE' || assignment.rubric.examType === 'FCE')
+    ? assignment.rubric.examType
+    : getExamTypeFromLevel(assignment.cefrLevel);
+  const examCriteria = CAMBRIDGE_CRITERIA[examType];
+
   return (
     <div className="space-y-6">
       {/* Back button */}
@@ -49,7 +51,7 @@ export const AssignmentDetailPage: React.FC = () => {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Volver al listado de consignas</span>
+          <span>Back to assignments list</span>
         </button>
       </div>
 
@@ -61,6 +63,9 @@ export const AssignmentDetailPage: React.FC = () => {
               <CEFRBadge level={assignment.cefrLevel} />
               <span className="text-xs font-bold text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-md">
                 {assignment.writingType}
+              </span>
+              <span className="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-md">
+                Cambridge {examType}
               </span>
               <span className="text-xs text-slate-400">• {assignment.courseName}</span>
             </div>
@@ -83,7 +88,7 @@ export const AssignmentDetailPage: React.FC = () => {
                 onClick={() => navigate(`/submit-handwritten?asgId=${assignment.id}`)}
                 icon={<UploadCloud className="w-4 h-4 text-slate-600" />}
               >
-                Subir Foto Manuscrita
+                Upload Handwritten Photo
               </Button>
               <Button
                 variant="primary"
@@ -91,7 +96,7 @@ export const AssignmentDetailPage: React.FC = () => {
                 onClick={() => navigate(`/submit-virtual?asgId=${assignment.id}`)}
                 icon={<PenTool className="w-4 h-4" />}
               >
-                Escribir en Línea
+                Write Online
               </Button>
             </div>
           )}
@@ -100,19 +105,19 @@ export const AssignmentDetailPage: React.FC = () => {
         {/* Requirements Box */}
         <div className="mt-6 pt-6 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Límite de Palabras</span>
-            <span className="font-bold text-slate-800">{assignment.minWords} - {assignment.maxWords} palabras</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Word Count</span>
+            <span className="font-bold text-slate-800">{assignment.minWords} - {assignment.maxWords} words</span>
           </div>
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Fecha de Entrega</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Due Date</span>
             <span className="font-bold text-slate-800">{new Date(assignment.dueDate).toLocaleDateString()}</span>
           </div>
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Docente Titular</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Lead Teacher</span>
             <span className="font-bold text-slate-800">{assignment.teacherName}</span>
           </div>
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Estado</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Status</span>
             <span className="font-bold text-emerald-700 capitalize">{assignment.status}</span>
           </div>
         </div>
@@ -125,9 +130,9 @@ export const AssignmentDetailPage: React.FC = () => {
         <div className="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
             <h3 className="text-base font-bold text-slate-900">
-              Consigna Oficial (Prompt de Examen)
+              Official Task Prompt & Instructions
             </h3>
-            <span className="text-xs text-slate-400 font-semibold uppercase">English Writing Task</span>
+            <span className="text-xs text-slate-400 font-semibold uppercase">Cambridge Assessment</span>
           </div>
 
           <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 font-sans text-sm text-slate-800 whitespace-pre-line leading-relaxed shadow-2xs">
@@ -138,9 +143,9 @@ export const AssignmentDetailPage: React.FC = () => {
           {role === 'student' && studentSubmission && (
             <div className="mt-6 p-4 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-teal-900">Ya has entregado esta actividad</p>
+                <p className="text-xs font-bold text-teal-900">You have already submitted this assignment</p>
                 <p className="text-[11px] text-teal-700 mt-0.5">
-                  Fecha de envío: {new Date(studentSubmission.submittedAt).toLocaleString()} ({studentSubmission.wordCount} palabras)
+                  Submitted on: {new Date(studentSubmission.submittedAt).toLocaleString()} ({studentSubmission.wordCount} words)
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -152,7 +157,7 @@ export const AssignmentDetailPage: React.FC = () => {
                     onClick={() => navigate(`/corrections/${studentSubmission.id}`)}
                     className="text-xs py-1"
                   >
-                    Ver Devolución
+                    View Feedback
                   </Button>
                 )}
               </div>
@@ -160,39 +165,72 @@ export const AssignmentDetailPage: React.FC = () => {
           )}
         </div>
 
-        {/* Right Col: Rubric Breakdown */}
+        {/* Right Col: Cambridge Rubric Breakdown */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 pb-3 border-b border-slate-100 mb-4">
-              Criterios de Evaluación y Rúbrica
-            </h3>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <BookOpen className="w-4 h-4 text-teal-600" />
+                <span>Cambridge Criteria ({examType})</span>
+              </h3>
+              <span className="text-[10px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
+                0 - 5 Marks / Subscale
+              </span>
+            </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-600">Precisión Gramatical (Grammar)</span>
-                <span className="font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">{assignment.rubric.grammarWeight}%</span>
+            <div className="space-y-3.5">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-800">1. Content</span>
+                  <span className="font-mono font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
+                    {assignment.rubric.contentWeight ?? 25}%
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  {examCriteria.content.description}
+                </p>
               </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-600">Rango de Vocabulario (Lexis)</span>
-                <span className="font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">{assignment.rubric.vocabularyWeight}%</span>
+
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-800">2. Communicative Achievement</span>
+                  <span className="font-mono font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
+                    {assignment.rubric.communicativeAchievementWeight ?? 25}%
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  {examCriteria.communicativeAchievement.description}
+                </p>
               </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-600">Ortografía y Puntuación</span>
-                <span className="font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">{assignment.rubric.spellingPunctuationWeight}%</span>
+
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-800">3. Organisation</span>
+                  <span className="font-mono font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
+                    {assignment.rubric.organisationWeight ?? 25}%
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  {examCriteria.organisation.description}
+                </p>
               </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-600">Cohesión y Conectores</span>
-                <span className="font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">{assignment.rubric.coherenceCohesionWeight}%</span>
-              </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-600">Cumplimiento de Consigna (Task)</span>
-                <span className="font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">{assignment.rubric.taskAchievementWeight}%</span>
+
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-800">4. Language</span>
+                  <span className="font-mono font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
+                    {assignment.rubric.languageWeight ?? 25}%
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  {examCriteria.language.description}
+                </p>
               </div>
             </div>
 
             {assignment.rubric.customGuidelines && (
-              <div className="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs text-slate-600">
-                <span className="font-semibold text-slate-800 block mb-1">Guías Docentes Adicionales:</span>
+              <div className="mt-4 p-3 rounded-xl bg-teal-50/70 border border-teal-200 text-xs text-teal-900">
+                <span className="font-semibold block mb-0.5">Teacher Guidelines:</span>
                 <p className="italic">{assignment.rubric.customGuidelines}</p>
               </div>
             )}
@@ -207,7 +245,7 @@ export const AssignmentDetailPage: React.FC = () => {
           <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
               <FileCheck2 className="w-5 h-5 text-teal-600" />
-              <span>Entregas de los Alumnos ({assignmentSubmissions.length})</span>
+              <span>Student Submissions ({assignmentSubmissions.length})</span>
             </h3>
             <Button
               variant="outline"
@@ -215,13 +253,13 @@ export const AssignmentDetailPage: React.FC = () => {
               onClick={() => navigate(`/submit-handwritten?asgId=${assignment.id}`)}
               icon={<UploadCloud className="w-3.5 h-3.5 text-slate-500" />}
             >
-              Cargar Manuscrito de un Alumno
+              Upload Student Handwritten Work
             </Button>
           </div>
 
           <div className="space-y-3">
             {assignmentSubmissions.length === 0 ? (
-              <p className="text-xs text-slate-400 py-6 text-center">No hay entregas registradas para esta consigna aún.</p>
+              <p className="text-xs text-slate-400 py-6 text-center">No submissions received for this assignment yet.</p>
             ) : (
               assignmentSubmissions.map(sub => (
                 <div key={sub.id} className="p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -234,7 +272,7 @@ export const AssignmentDetailPage: React.FC = () => {
                     <div>
                       <p className="text-xs font-bold text-slate-900">{sub.studentName}</p>
                       <p className="text-[11px] text-slate-500">
-                        {sub.submissionType === 'handwritten' ? 'Manuscrito (Foto subida)' : 'Redacción Virtual'} • {sub.wordCount} palabras • Enviado: {new Date(sub.submittedAt).toLocaleDateString()}
+                        {sub.submissionType === 'handwritten' ? 'Handwritten (Uploaded image)' : 'Online Editor'} • {sub.wordCount} words • Submitted: {new Date(sub.submittedAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
@@ -247,7 +285,7 @@ export const AssignmentDetailPage: React.FC = () => {
                       onClick={() => navigate(`/corrections/${sub.id}`)}
                       className="text-xs py-1.5"
                     >
-                      {sub.status === 'PUBLISHED' ? 'Ver Corrección Publicada' : 'Revisar / Calificar IA'}
+                      {sub.status === 'PUBLISHED' ? 'View Published Feedback' : 'Review Cambridge Assessment'}
                     </Button>
                   </div>
                 </div>

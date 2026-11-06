@@ -37,10 +37,10 @@ export const StudentProgressOverview: React.FC = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">
-          Progreso y Rendimiento de Estudiantes
+          Student Progress & Performance
         </h1>
         <p className="text-xs text-slate-500 mt-1">
-          Seguimiento longitudinal de calificaciones, patrones de error y evolución en redacción inglesa.
+          Longitudinal tracking of Cambridge writing scores, error patterns, and language proficiency.
         </p>
       </div>
 
@@ -52,12 +52,12 @@ export const StudentProgressOverview: React.FC = () => {
             type="text"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            placeholder="Buscar por nombre, email o DNI del alumno..."
+            placeholder="Search by student name, email, or ID (DNI)..."
             className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
           />
         </div>
         <span className="text-xs text-slate-500 font-semibold">
-          {visibleStudents.length} alumnos registrados
+          {visibleStudents.length} registered students
         </span>
       </div>
 
@@ -88,13 +88,13 @@ export const StudentProgressOverview: React.FC = () => {
                       <h3 className="text-sm font-bold text-slate-900">{student.name}</h3>
                       <p className="text-[11px] text-slate-400">{student.email}</p>
                       <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
-                        DNI: {student.dni}
+                        ID: {student.dni}
                       </span>
                     </div>
                   </div>
 
                   <div className="p-2 rounded-xl bg-teal-50 text-teal-800 text-center border border-teal-100">
-                    <span className="text-[10px] font-bold block uppercase tracking-wider text-teal-600">Promedio</span>
+                    <span className="text-[10px] font-bold block uppercase tracking-wider text-teal-600">Average</span>
                     <span className="text-sm font-black font-mono">{avg}</span>
                   </div>
                 </div>
@@ -103,7 +103,7 @@ export const StudentProgressOverview: React.FC = () => {
                 <div className="mt-4 pt-3 border-t border-slate-100 space-y-2 text-xs">
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-                      Cursos Matriculados:
+                      Enrolled Courses:
                     </span>
                     <div className="flex flex-wrap gap-1">
                       {studentCourses.map(c => (
@@ -115,8 +115,8 @@ export const StudentProgressOverview: React.FC = () => {
                   </div>
 
                   <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
-                    <span>Entregas registradas:</span>
-                    <span className="font-bold text-slate-800">{studentSubmissions.length} producciones</span>
+                    <span>Submitted writings:</span>
+                    <span className="font-bold text-slate-800">{studentSubmissions.length} essays</span>
                   </div>
                 </div>
               </div>
@@ -129,7 +129,7 @@ export const StudentProgressOverview: React.FC = () => {
                   onClick={() => navigate(`/student-progress/${student.id}`)}
                   className="w-full text-xs py-1.5 justify-center"
                 >
-                  <span>Ver Ficha y Estadísticas</span>
+                  <span>View Student Profile & Stats</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </Button>
               </div>

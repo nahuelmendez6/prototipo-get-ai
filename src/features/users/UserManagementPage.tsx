@@ -47,12 +47,12 @@ export const UserManagementPage: React.FC = () => {
 
   const handleDeleteUser = (id: string, name: string) => {
     if (id === currentUser?.id) {
-      showToast('error', 'Acción no permitida', 'No puedes eliminar tu propio usuario activo.');
+      showToast('error', 'Action Not Allowed', 'You cannot delete your own active user account.');
       return;
     }
-    if (confirm(`¿Estás seguro de eliminar al usuario "${name}"?`)) {
+    if (confirm(`Are you sure you want to delete user "${name}"?`)) {
       mockUserService.deleteUser(id);
-      showToast('info', 'Usuario Eliminado', `El usuario ${name} fue dado de baja.`);
+      showToast('info', 'User Deleted', `User ${name} was successfully removed.`);
       reloadAll();
     }
   };
@@ -63,10 +63,10 @@ export const UserManagementPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
-            Gestión de Usuarios y Accesos
+            User & Access Management
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Administración central de docentes, estudiantes y administradores del instituto.
+            Central administration of teachers, students, and institutional administrators.
           </p>
         </div>
 
@@ -79,7 +79,7 @@ export const UserManagementPage: React.FC = () => {
           }}
           icon={<Plus className="w-4 h-4" />}
         >
-          Nuevo Usuario
+          New User
         </Button>
       </div>
 
@@ -87,9 +87,9 @@ export const UserManagementPage: React.FC = () => {
       <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200/90 flex items-start gap-3 shadow-2xs">
         <KeyRound className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
         <div className="text-xs text-amber-900 leading-relaxed">
-          <span className="font-bold">Regla de Credenciales del Instituto:</span>
+          <span className="font-bold">Institutional Credentials Policy:</span>
           <p className="mt-0.5 text-amber-800">
-            La contraseña inicial de cada usuario es su <strong>DNI</strong>. Al registrar un nuevo docente o estudiante, su documento será la clave con la que ingresará por primera vez a la plataforma.
+            Each user's initial password is their <strong>ID (DNI)</strong>. When onboarding a new teacher or student, their ID number is the key used to access the platform for the first time.
           </p>
         </div>
       </div>
@@ -102,19 +102,19 @@ export const UserManagementPage: React.FC = () => {
             type="text"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            placeholder="Buscar por nombre, correo electrónico o DNI..."
+            placeholder="Search by name, email, or ID (DNI)..."
             className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 focus:bg-white"
           />
         </div>
 
         {/* Role filter buttons */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-          <span className="text-xs text-slate-400 font-semibold mr-1">Filtrar:</span>
+          <span className="text-xs text-slate-400 font-semibold mr-1">Filter:</span>
           {[
-            { id: 'all', label: 'Todos' },
-            { id: 'student', label: 'Estudiantes' },
-            { id: 'teacher', label: 'Docentes' },
-            { id: 'admin', label: 'Administradores' },
+            { id: 'all', label: 'All' },
+            { id: 'student', label: 'Students' },
+            { id: 'teacher', label: 'Teachers' },
+            { id: 'admin', label: 'Admins' },
           ].map(f => (
             <button
               key={f.id}
@@ -137,12 +137,12 @@ export const UserManagementPage: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/75 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                <th className="py-3 px-4">Usuario</th>
-                <th className="py-3 px-4">DNI (Contraseña Inicial)</th>
-                <th className="py-3 px-4">Rol</th>
-                <th className="py-3 px-4">Teléfono</th>
-                <th className="py-3 px-4">Fecha de Alta</th>
-                <th className="py-3 px-4 text-right">Acciones</th>
+                <th className="py-3 px-4">User</th>
+                <th className="py-3 px-4">ID / DNI (Initial Password)</th>
+                <th className="py-3 px-4">Role</th>
+                <th className="py-3 px-4">Phone</th>
+                <th className="py-3 px-4">Joined Date</th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs text-slate-700">
@@ -163,7 +163,7 @@ export const UserManagementPage: React.FC = () => {
                             <span className="font-bold text-slate-900">{user.name}</span>
                             {isCurrent && (
                               <span className="text-[10px] bg-teal-100 text-teal-800 font-bold px-1.5 py-0.2 rounded">
-                                Tú
+                                You
                               </span>
                             )}
                           </div>
@@ -192,26 +192,26 @@ export const UserManagementPage: React.FC = () => {
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => switchUser(user.id)}
-                          className="text-[11px] text-teal-700 hover:text-teal-900 font-semibold px-2 py-1 rounded bg-teal-50 hover:bg-teal-100 transition-colors"
-                          title="Simular sesión como este usuario"
+                          className="text-[11px] text-teal-700 hover:text-teal-900 font-semibold px-2 py-1 rounded bg-teal-50 hover:bg-teal-100 transition-colors cursor-pointer"
+                          title="Switch session to this user"
                         >
-                          Simular
+                          Switch
                         </button>
                         <button
                           onClick={() => {
                             setUserToEdit(user);
                             setIsModalOpen(true);
                           }}
-                          className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                          title="Editar usuario"
+                          className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                          title="Edit user"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         {!isCurrent && (
                           <button
                             onClick={() => handleDeleteUser(user.id, user.name)}
-                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                            title="Eliminar usuario"
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                            title="Delete user"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

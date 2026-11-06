@@ -51,11 +51,11 @@ export const mockSubmissionService = {
     const newSubmission: Submission = {
       id: `sub-${Date.now()}`,
       assignmentId: data.assignmentId,
-      assignmentTitle: assignment?.title || 'Actividad de Escritura',
+      assignmentTitle: assignment?.title || 'Writing Task',
       courseId: assignment?.courseId || '',
       courseName: assignment?.courseName || '',
       studentId: data.studentId,
-      studentName: student?.name || 'Estudiante',
+      studentName: student?.name || 'Student',
       studentEmail: student?.email || '',
       studentAvatar: student?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
       submissionType: data.submissionType,
@@ -73,9 +73,9 @@ export const mockSubmissionService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || data.studentId,
-      userName: currentUser?.name || student?.name || 'Estudiante',
+      userName: currentUser?.name || student?.name || 'Student',
       role: currentUser?.role || 'student',
-      action: data.submissionType === 'handwritten' ? 'Subió entrega manuscrita' : 'Envió redacción virtual',
+      action: data.submissionType === 'handwritten' ? 'Uploaded handwritten submission' : 'Submitted online writing',
       target: newSubmission.assignmentTitle,
       type: 'submission'
     });
@@ -105,9 +105,9 @@ export const mockSubmissionService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'system',
-      userName: 'Motor de Inteligencia Artificial',
+      userName: 'AI Assessment Engine',
       role: 'teacher',
-      action: 'Generó corrección sugerida',
+      action: 'Generated preliminary Cambridge evaluation',
       target: submissions[index].assignmentTitle,
       type: 'review'
     });

@@ -7,15 +7,11 @@ import { Button } from '../../components/ui/Button';
 import { CourseEnrollmentModal } from './CourseEnrollmentModal';
 import { 
   ArrowLeft, 
-  BookOpen, 
   Users, 
   Clock, 
-  GraduationCap, 
-  Calendar, 
   FileText, 
   Plus, 
-  CheckCircle2,
-  FileCheck
+  FileCheck 
 } from 'lucide-react';
 
 export const CourseDetailPage: React.FC = () => {
@@ -31,9 +27,9 @@ export const CourseDetailPage: React.FC = () => {
   if (!course) {
     return (
       <div className="text-center py-12">
-        <p className="text-sm text-slate-500">Curso no encontrado.</p>
+        <p className="text-sm text-slate-500">Course not found.</p>
         <Button variant="outline" size="sm" onClick={() => navigate('/courses')} className="mt-3">
-          Volver a Cursos
+          Back to Courses
         </Button>
       </div>
     );
@@ -53,7 +49,7 @@ export const CourseDetailPage: React.FC = () => {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Volver al listado de cursos</span>
+          <span>Back to courses list</span>
         </button>
       </div>
 
@@ -82,7 +78,7 @@ export const CourseDetailPage: React.FC = () => {
                 onClick={() => setIsEnrollmentOpen(true)}
                 icon={<Users className="w-4 h-4" />}
               >
-                Matricular Alumnos ({course.studentIds.length})
+                Enroll Students ({course.studentIds.length})
               </Button>
               <Button
                 variant="primary"
@@ -90,7 +86,7 @@ export const CourseDetailPage: React.FC = () => {
                 onClick={() => navigate('/assignments')}
                 icon={<Plus className="w-4 h-4" />}
               >
-                Crear Consigna
+                Create Assignment
               </Button>
             </div>
           )}
@@ -99,7 +95,7 @@ export const CourseDetailPage: React.FC = () => {
         {/* Info Grid */}
         <div className="mt-6 pt-6 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Docente Responsable</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Lead Instructor</span>
             <div className="flex items-center gap-2">
               <img
                 src={teacher?.avatar || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150'}
@@ -111,7 +107,7 @@ export const CourseDetailPage: React.FC = () => {
           </div>
 
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Días y Horarios</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Schedule & Days</span>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-slate-500" />
               <span className="font-medium text-slate-700">{course.schedule}</span>
@@ -119,10 +115,10 @@ export const CourseDetailPage: React.FC = () => {
           </div>
 
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Total Matriculados</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Total Enrolled</span>
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-teal-600" />
-              <span className="font-bold text-slate-800">{course.studentIds.length} Alumnos</span>
+              <span className="font-bold text-slate-800">{course.studentIds.length} Students</span>
             </div>
           </div>
         </div>
@@ -136,21 +132,21 @@ export const CourseDetailPage: React.FC = () => {
           <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <Users className="w-4 h-4 text-teal-600" />
-              <span>Nómina de Alumnos ({enrolledStudents.length})</span>
+              <span>Enrolled Students ({enrolledStudents.length})</span>
             </h3>
             {role === 'admin' && (
               <button
                 onClick={() => setIsEnrollmentOpen(true)}
                 className="text-xs font-semibold text-teal-600 hover:text-teal-700"
               >
-                Editar
+                Edit
               </button>
             )}
           </div>
 
           <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
             {enrolledStudents.length === 0 ? (
-              <p className="text-xs text-slate-400 text-center py-4">No hay alumnos inscritos en este curso aún.</p>
+              <p className="text-xs text-slate-400 text-center py-4">No students currently enrolled in this course.</p>
             ) : (
               enrolledStudents.map(student => (
                 <div key={student.id} className="flex items-center justify-between gap-2 p-2 rounded-xl hover:bg-slate-50">
@@ -162,14 +158,14 @@ export const CourseDetailPage: React.FC = () => {
                     />
                     <div className="truncate">
                       <p className="text-xs font-semibold text-slate-800 truncate">{student.name}</p>
-                      <p className="text-[10px] text-slate-400">DNI: {student.dni}</p>
+                      <p className="text-[10px] text-slate-400">ID: {student.dni}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => navigate(`/student-progress/${student.id}`)}
                     className="text-[11px] text-teal-700 hover:underline font-medium"
                   >
-                    Ver Perfil
+                    Profile
                   </button>
                 </div>
               ))
@@ -185,13 +181,13 @@ export const CourseDetailPage: React.FC = () => {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <FileText className="w-4 h-4 text-indigo-600" />
-                <span>Actividades y Consignas del Curso ({courseAssignments.length})</span>
+                <span>Course Writing Assignments ({courseAssignments.length})</span>
               </h3>
             </div>
 
             <div className="space-y-3">
               {courseAssignments.length === 0 ? (
-                <p className="text-xs text-slate-400 py-4 text-center">No hay consignas asignadas a este curso todavía.</p>
+                <p className="text-xs text-slate-400 py-4 text-center">No writing tasks scheduled for this course yet.</p>
               ) : (
                 courseAssignments.map(asg => (
                   <div key={asg.id} className="p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3">
@@ -200,10 +196,10 @@ export const CourseDetailPage: React.FC = () => {
                         <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">
                           {asg.writingType}
                         </span>
-                        <span className="text-[11px] text-slate-400">{asg.minWords} - {asg.maxWords} palabras</span>
+                        <span className="text-[11px] text-slate-400">{asg.minWords} - {asg.maxWords} words</span>
                       </div>
                       <h4 className="text-xs font-bold text-slate-800">{asg.title}</h4>
-                      <p className="text-[11px] text-slate-500 mt-0.5">Vencimiento: {new Date(asg.dueDate).toLocaleDateString()}</p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">Due: {new Date(asg.dueDate).toLocaleDateString()}</p>
                     </div>
 
                     <Button
@@ -212,7 +208,7 @@ export const CourseDetailPage: React.FC = () => {
                       onClick={() => navigate(`/assignments/${asg.id}`)}
                       className="text-xs py-1"
                     >
-                      Ver Consigna
+                      View Prompt
                     </Button>
                   </div>
                 ))
@@ -225,13 +221,13 @@ export const CourseDetailPage: React.FC = () => {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <FileCheck className="w-4 h-4 text-teal-600" />
-                <span>Entregas de los Alumnos ({courseSubmissions.length})</span>
+                <span>Class Submissions ({courseSubmissions.length})</span>
               </h3>
             </div>
 
             <div className="space-y-3">
               {courseSubmissions.length === 0 ? (
-                <p className="text-xs text-slate-400 py-4 text-center">No se han registrado entregas para este curso todavía.</p>
+                <p className="text-xs text-slate-400 py-4 text-center">No submissions recorded for this course yet.</p>
               ) : (
                 courseSubmissions.map(sub => (
                   <div key={sub.id} className="p-3 rounded-2xl border border-slate-100 flex items-center justify-between gap-3">
@@ -255,7 +251,7 @@ export const CourseDetailPage: React.FC = () => {
                         onClick={() => navigate(`/corrections/${sub.id}`)}
                         className="text-xs py-1"
                       >
-                        Ver
+                        Inspect
                       </Button>
                     </div>
                   </div>

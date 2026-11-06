@@ -34,7 +34,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const resetDemoData = useCallback(() => {
     storageService.resetAllData();
     reloadAll();
-    showToast('info', 'Datos Reiniciados', 'La base de datos simulada ha sido restaurada con los datos de ejemplo iniciales.');
+    showToast('info', 'Data Reset', 'The mock database has been restored to the initial demo datasets.');
   }, [reloadAll, showToast]);
 
   return (

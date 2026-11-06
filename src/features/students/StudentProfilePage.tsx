@@ -31,9 +31,9 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
   if (!student) {
     return (
       <div className="text-center py-12">
-        <p className="text-sm text-slate-500">Estudiante no encontrado.</p>
+        <p className="text-sm text-slate-500">Student not found.</p>
         <Button variant="outline" size="sm" onClick={() => navigate(-1)} className="mt-3">
-          Regresar
+          Go Back
         </Button>
       </div>
     );
@@ -64,10 +64,10 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
         <div>
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Volver</span>
+            <span>Back</span>
           </button>
         </div>
       )}
@@ -84,11 +84,11 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{student.name}</h1>
               <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-                Estudiante
+                Student
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              {student.email} • <strong>DNI: {student.dni}</strong> • Tel: {student.phone || '+54 11 3912-7744'}
+              {student.email} • <strong>ID/DNI: {student.dni}</strong> • Phone: {student.phone || '+54 11 3912-7744'}
             </p>
             <div className="flex items-center gap-2 mt-2">
               {enrolledCourses.map(c => (
@@ -103,15 +103,15 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
         {/* Global Summary Stats */}
         <div className="grid grid-cols-3 gap-3 text-center">
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Promedio</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block">Average</span>
             <span className="text-xl font-black text-teal-900 font-mono">{avgGrade}</span>
           </div>
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Entregas</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block">Submissions</span>
             <span className="text-xl font-bold text-slate-800">{studentSubmissions.length}</span>
           </div>
           <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Aprobadas</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block">Approved</span>
             <span className="text-xl font-bold text-emerald-700">{publishedSubmissions.length}</span>
           </div>
         </div>
@@ -123,14 +123,14 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
           <div>
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-teal-600" />
-              <span>Evolución de Rendimiento en Redacción (Writing Evolution)</span>
+              <span>Writing Evolution & Performance Trajectory</span>
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              Calificaciones obtenidas en trabajos prácticos evaluados
+              Marks achieved across evaluated Cambridge writing assignments
             </p>
           </div>
           <span className="text-xs font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg">
-            Meta CEFR: B2 / C1
+            Target CEFR: B2 / C1
           </span>
         </div>
 
@@ -154,21 +154,21 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
                       {grade}
                     </div>
                     <span className="text-[10px] text-slate-500 font-medium truncate max-w-[80px] text-center">
-                      Act #{idx + 1}
+                      Task #{idx + 1}
                     </span>
                   </div>
                 );
               })
             ) : (
               <div className="col-span-full h-full flex items-center justify-center text-xs text-slate-400">
-                Aún no hay calificaciones publicadas para trazar el gráfico de evolución.
+                No published evaluations yet to plot performance trajectory.
               </div>
             )}
           </div>
           <div className="flex justify-between text-[11px] text-slate-400 mt-2">
-            <span>Inicio del Ciclo</span>
-            <span>Escala 1 - 10</span>
-            <span>Evaluación Actual</span>
+            <span>Term Start</span>
+            <span>Scale 1 - 10</span>
+            <span>Current Evaluation</span>
           </div>
         </div>
       </div>
@@ -180,20 +180,20 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
           <h3 className="text-sm font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-amber-500" />
-            <span>Patrones Frecuentes de Error</span>
+            <span>Frequent Error Patterns</span>
           </h3>
 
           <div className="space-y-3">
             {[
-              { type: 'grammar', label: 'Gramática y Tiempos Verbales', count: mistakeCountsByType['grammar'] || 2, color: 'bg-indigo-500' },
-              { type: 'style', label: 'Estilo y Registro Formal', count: mistakeCountsByType['style'] || 1, color: 'bg-rose-500' },
-              { type: 'spelling', label: 'Ortografía y Tipos', count: mistakeCountsByType['spelling'] || 1, color: 'bg-amber-500' },
-              { type: 'punctuation', label: 'Puntuación y Guiones', count: mistakeCountsByType['punctuation'] || 1, color: 'bg-sky-500' },
+              { type: 'grammar', label: 'Grammar & Verb Tenses', count: mistakeCountsByType['grammar'] || 2, color: 'bg-indigo-500' },
+              { type: 'style', label: 'Style & Formal Register', count: mistakeCountsByType['style'] || 1, color: 'bg-rose-500' },
+              { type: 'spelling', label: 'Spelling & Typos', count: mistakeCountsByType['spelling'] || 1, color: 'bg-amber-500' },
+              { type: 'punctuation', label: 'Punctuation & Syntax', count: mistakeCountsByType['punctuation'] || 1, color: 'bg-sky-500' },
             ].map(item => (
               <div key={item.type} className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-700 font-medium">{item.label}</span>
-                  <span className="font-bold text-slate-900">{item.count} observ.</span>
+                  <span className="font-bold text-slate-900">{item.count} issues</span>
                 </div>
                 <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                   <div
@@ -206,7 +206,7 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
           </div>
 
           <div className="p-3 rounded-2xl bg-teal-50/60 border border-teal-100 text-[11px] text-teal-900 leading-relaxed">
-            <strong>Recomendación general del docente:</strong> Repasar conectores formales y evitar contracciones informales (don't, can't) en redacciones de examen Cambridge.
+            <strong>Teacher's General Recommendation:</strong> Review formal linking words and avoid informal contractions (don't, can't) in Cambridge exam writings.
           </div>
         </div>
 
@@ -215,7 +215,7 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <FileCheck2 className="w-4 h-4 text-teal-600" />
-              <span>Historial de Redacciones ({studentSubmissions.length})</span>
+              <span>Writing Submissions History ({studentSubmissions.length})</span>
             </h3>
           </div>
 
@@ -231,7 +231,7 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
-                        {sub.submissionType === 'handwritten' ? 'Manuscrito' : 'Virtual'}
+                        {sub.submissionType === 'handwritten' ? 'Handwritten' : 'Virtual'}
                       </span>
                       <span className="text-[11px] text-slate-400">
                         {new Date(sub.submittedAt).toLocaleDateString()}
@@ -239,7 +239,7 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
                     </div>
 
                     <h4 className="text-xs font-bold text-slate-900">{sub.assignmentTitle}</h4>
-                    <p className="text-[11px] text-slate-500 mt-0.5">{sub.courseName} • {sub.wordCount} palabras</p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">{sub.courseName} • {sub.wordCount} words</p>
                   </div>
 
                   <div className="flex items-center gap-3 flex-shrink-0 self-end sm:self-center">
@@ -258,7 +258,7 @@ export const StudentProfilePage: React.FC<{ isSelf?: boolean }> = ({ isSelf = fa
                         onClick={() => navigate(`/corrections/${sub.id}`)}
                         className="text-xs py-1"
                       >
-                        Ver Detalle
+                        View Assessment
                       </Button>
                     )}
                   </div>

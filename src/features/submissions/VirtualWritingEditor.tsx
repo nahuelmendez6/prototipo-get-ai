@@ -11,13 +11,9 @@ import {
   PenTool, 
   Save, 
   Send, 
-  ArrowLeft, 
-  Sparkles, 
-  CheckCircle2, 
-  AlertCircle,
-  Clock,
-  BookOpen,
-  HelpCircle
+  ArrowLeft,
+  UploadCloud,
+  CheckCircle2
 } from 'lucide-react';
 
 export const VirtualWritingEditor: React.FC = () => {
@@ -46,9 +42,8 @@ export const VirtualWritingEditor: React.FC = () => {
       const savedDraft = localStorage.getItem(draftKey);
       if (savedDraft) {
         setText(savedDraft);
-        setLastSaved('Borrador recuperado de la memoria');
+        setLastSaved('Draft restored locally');
       } else {
-        // Sample default essay text for testing conveniency
         setText(`In recent years, remote working has emerged as one of the most prominent workplace transformations globally. While there are undeniable advantages for many employees, several drawbacks should also be taken into consideration.
 
 To begin with, working from home provides exceptional flexibility and eliminates the stress of daily commuting. Employees save significant amounts of time, allowing them to balance family commitments and personal well-being more effectively. Furthermore, companies can reduce office expenses and tap into a wider talent pool.
@@ -75,15 +70,15 @@ In conclusion, although remote working presents clear communication hurdles, I b
     if (assignmentId && currentUser) {
       const draftKey = `draft_${currentUser.id}_${assignmentId}`;
       localStorage.setItem(draftKey, text);
-      setLastSaved(new Date().toLocaleTimeString());
-      showToast('info', 'Borrador Guardado', 'Tu texto se ha guardado localmente en este navegador.');
+      setLastSaved(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      showToast('info', 'Draft Saved', 'Your progress has been saved in this session.');
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim()) {
-      showToast('error', 'Texto Vacío', 'Por favor escribe tu redacción antes de enviar.');
+      showToast('error', 'Empty Text', 'Please write your essay before submitting.');
       return;
     }
 
@@ -97,9 +92,7 @@ In conclusion, although remote working presents clear communication hurdles, I b
       text,
     });
 
-    // Clean up draft
     localStorage.removeItem(`draft_${currentUser.id}_${assignmentId}`);
-
     setCreatedSubmissionId(newSub.id);
     setIsProcessing(true);
   };
@@ -109,53 +102,72 @@ In conclusion, although remote working presents clear communication hurdles, I b
       await mockSubmissionService.processWithAI(createdSubmissionId);
       reloadAll();
       setIsProcessing(false);
-      showToast('success', 'Redacción Enviada', 'Tu entrega fue recibida y el motor de IA ha preparado la corrección para tu docente.');
+      showToast('success', 'Writing Submitted', 'Your essay has been preliminarily analyzed by AI and submitted for teacher review.');
       navigate('/dashboard');
     }
   };
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Back button */}
-      <div>
+      {/* Navigation header with back button and Mode Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#0d3471] transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Volver</span>
+          <span>Back to assignments</span>
         </button>
+
+        {/* Simplified Flow: Tab switcher between online writing & handwritten upload */}
+        <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-2xl border border-slate-200/80">
+          <button
+            type="button"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-[#0d3471] text-white shadow-2xs"
+          >
+            <PenTool className="w-3.5 h-3.5 text-white" />
+            <span>Online Writing Editor</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(`/submit-handwritten${assignmentId ? `?asgId=${assignmentId}` : ''}`)}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition-all hover:bg-white cursor-pointer"
+          >
+            <UploadCloud className="w-3.5 h-3.5 text-slate-400" />
+            <span>Handwritten Photo</span>
+          </button>
+        </div>
       </div>
 
-      {/* Header */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-600">
+      {/* Assignment selector and title header */}
+      <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-[#0d3471]/10 border border-[#0d3471]/20 flex items-center justify-center text-[#0d3471]">
             <PenTool className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
-              Redacción Virtual en Línea
+              Cambridge Writing Studio
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              Editor de texto integrado con contador de palabras y revisión inteligente
+              Editor with live word counter and analytical pre-assessment
             </p>
           </div>
         </div>
 
         {/* Assignment selector dropdown */}
-        <div className="min-w-[240px]">
-          <label className="block text-[11px] font-semibold text-slate-500 mb-1">
-            Seleccionar Consigna:
+        <div className="min-w-[260px]">
+          <label className="block text-[11px] font-bold text-slate-600 mb-1">
+            Selected Assignment:
           </label>
           <select
             value={assignmentId}
             onChange={e => setAssignmentId(e.target.value)}
-            className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 font-medium"
+            className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0d3471] bg-slate-50 font-medium text-slate-800"
           >
             {studentAssignments.map(a => (
               <option key={a.id} value={a.id}>
-                {a.title} ({a.cefrLevel})
+                {a.title} ({a.cefrLevel} - {a.writingType})
               </option>
             ))}
           </select>
@@ -164,13 +176,13 @@ In conclusion, although remote working presents clear communication hurdles, I b
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* Left Column: Assignment Prompt and Rubric (Reference) */}
+        {/* Left Column: Assignment Prompt and Rubric Guidelines */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
           {selectedAssignment ? (
             <>
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <CEFRBadge level={selectedAssignment.cefrLevel} />
-                <span className="text-xs font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded">
+                <span className="text-xs font-bold text-[#0d3471] bg-[#0d3471]/10 px-2.5 py-0.5 rounded-md border border-[#0d3471]/20">
                   {selectedAssignment.writingType}
                 </span>
               </div>
@@ -179,33 +191,33 @@ In conclusion, although remote working presents clear communication hurdles, I b
                 <h3 className="text-sm font-bold text-slate-900">
                   {selectedAssignment.title}
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5 font-medium">
                   {selectedAssignment.courseName}
                 </p>
               </div>
 
               <div>
                 <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
-                  Instrucciones de la Actividad:
+                  Prompt & Instructions:
                 </span>
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs text-slate-700 whitespace-pre-line leading-relaxed font-sans max-h-60 overflow-y-auto">
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 text-xs text-slate-700 whitespace-pre-line leading-relaxed font-sans max-h-60 overflow-y-auto">
                   {selectedAssignment.instructions}
                 </div>
               </div>
 
               <div className="pt-3 border-t border-slate-100 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Extensión requerida:</span>
-                  <span className="font-bold text-slate-800">{min} - {max} palabras</span>
+                  <span className="text-slate-500">Word count range:</span>
+                  <span className="font-bold text-slate-800">{min} - {max} words</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Fecha de entrega:</span>
+                  <span className="text-slate-500">Due date:</span>
                   <span className="font-semibold text-slate-800">{new Date(selectedAssignment.dueDate).toLocaleDateString()}</span>
                 </div>
               </div>
             </>
           ) : (
-            <p className="text-xs text-slate-400">Selecciona una actividad para ver las instrucciones.</p>
+            <p className="text-xs text-slate-400 py-4 text-center">Select an assignment to view instructions.</p>
           )}
         </div>
 
@@ -216,39 +228,45 @@ In conclusion, although remote working presents clear communication hurdles, I b
             <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-3">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-slate-800">
-                  Palabras: <span className={isWithinRange ? 'text-teal-600 text-sm' : isBelowMin ? 'text-amber-600' : 'text-rose-600'}>{wordCount}</span> / {min}-{max}
+                  Words:{' '}
+                  <span className={`font-mono text-sm font-extrabold ${isWithinRange ? 'text-[#0d3471]' : isBelowMin ? 'text-amber-600' : 'text-[#c81414]'}`}>
+                    {wordCount}
+                  </span>{' '}
+                  / {min}-{max}
                 </span>
+
                 {isWithinRange && (
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                    Rango óptimo ✓
+                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    <span>Within target range</span>
                   </span>
                 )}
                 {isBelowMin && (
-                  <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
-                    Faltan {min - wordCount} palabras
+                  <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
+                    {min - wordCount} words needed
                   </span>
                 )}
                 {isAboveMax && (
-                  <span className="text-[10px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full">
-                    Excedido por {wordCount - max} palabras
+                  <span className="text-[10px] font-semibold text-[#c81414] bg-red-50 border border-red-200 px-2 py-0.5 rounded-md">
+                    {wordCount - max} words over limit
                   </span>
                 )}
               </div>
 
               {lastSaved && (
                 <span className="text-[10px] text-slate-400">
-                  Guardado: {lastSaved}
+                  {lastSaved}
                 </span>
               )}
             </div>
 
             {/* Writing Textarea */}
             <textarea
-              rows={16}
+              rows={15}
               value={text}
               onChange={e => setText(e.target.value)}
-              placeholder="Escribe tu redacción en inglés aquí..."
-              className="w-full p-4 text-sm font-sans text-slate-800 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50/40 focus:bg-white resize-y leading-relaxed transition-all"
+              placeholder="Write your English essay here..."
+              className="w-full p-4 text-sm font-sans text-slate-800 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0d3471] bg-slate-50/50 focus:bg-white resize-y leading-relaxed transition-all"
             />
           </div>
 
@@ -261,7 +279,7 @@ In conclusion, although remote working presents clear communication hurdles, I b
               onClick={handleSaveDraft}
               icon={<Save className="w-4 h-4 text-slate-500" />}
             >
-              Guardar Borrador
+              Save Draft
             </Button>
 
             <Button
@@ -269,10 +287,10 @@ In conclusion, although remote working presents clear communication hurdles, I b
               variant="primary"
               size="md"
               onClick={handleSubmit}
-              className="font-bold bg-teal-600 hover:bg-teal-700 shadow-sm"
-              icon={<Send className="w-4 h-4 text-teal-200" />}
+              className="font-bold shadow-xs"
+              icon={<Send className="w-4 h-4" />}
             >
-              Entregar Redacción
+              Submit Assignment
             </Button>
           </div>
         </div>

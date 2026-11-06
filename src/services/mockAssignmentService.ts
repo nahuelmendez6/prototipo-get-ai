@@ -44,9 +44,9 @@ export const mockAssignmentService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'teacher',
-      userName: currentUser?.name || 'Docente',
+      userName: currentUser?.name || 'Teacher',
       role: currentUser?.role || 'teacher',
-      action: 'Publicó nueva consigna',
+      action: 'Published new assignment',
       target: newAssignment.title,
       type: 'assignment'
     });
@@ -65,9 +65,9 @@ export const mockAssignmentService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'teacher',
-      userName: currentUser?.name || 'Docente',
+      userName: currentUser?.name || 'Teacher',
       role: currentUser?.role || 'teacher',
-      action: 'Modificó consigna',
+      action: 'Updated assignment',
       target: assignments[index].title,
       type: 'assignment'
     });
@@ -86,9 +86,9 @@ export const mockAssignmentService = {
     const currentUser = storageService.getCurrentUser();
     storageService.addActivityLog({
       userId: currentUser?.id || 'teacher',
-      userName: currentUser?.name || 'Docente',
+      userName: currentUser?.name || 'Teacher',
       role: currentUser?.role || 'teacher',
-      action: 'Eliminó consigna',
+      action: 'Deleted assignment',
       target: assignment.title,
       type: 'assignment'
     });

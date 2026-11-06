@@ -1,7 +1,7 @@
 import { Evaluation, Mistake } from '../types';
 
 /**
- * Generates a realistic simulated AI evaluation based on text input.
+ * Generates a realistic simulated AI evaluation based on text input and Cambridge criteria.
  */
 export function generateMockAIEvaluation(submissionId: string, text: string): Evaluation {
   const words = text.trim().split(/\s+/).filter(Boolean);
@@ -60,7 +60,6 @@ export function generateMockAIEvaluation(submissionId: string, text: string): Ev
   }
 
   if (sampleMistakes.length === 0) {
-    // Add default feedback if clean
     sampleMistakes.push({
       id: `mst-${Date.now()}-def`,
       original: words[0] || 'Hello',
@@ -71,12 +70,14 @@ export function generateMockAIEvaluation(submissionId: string, text: string): Ev
     });
   }
 
-  const grammarScore = Math.max(6.5, Math.min(9.5, +(8.5 - sampleMistakes.length * 0.4).toFixed(1)));
-  const vocabScore = Math.max(7.0, Math.min(9.5, +(8.2 + (wordCount > 100 ? 0.6 : -0.5)).toFixed(1)));
-  const spellingScore = 8.8;
-  const coherenceScore = 8.5;
-  const taskScore = wordCount >= 100 ? 9.0 : 7.0;
-  const overall = +((grammarScore + vocabScore + spellingScore + coherenceScore + taskScore) / 5).toFixed(1);
+  // Cambridge scale (0 to 5) for each criterion
+  const contentScore = wordCount >= 120 ? 4.5 : wordCount >= 70 ? 3.5 : 2.5;
+  const commScore = wordCount >= 100 ? 4.0 : 3.0;
+  const orgScore = 4.0;
+  const langScore = Math.max(2.0, Math.min(5.0, +(4.5 - sampleMistakes.length * 0.4).toFixed(1)));
+
+  const totalMarks = +(contentScore + commScore + orgScore + langScore).toFixed(1);
+  const overallGrade = +(totalMarks / 2).toFixed(1); // Scaled to / 10
 
   return {
     id: `eval-${Date.now()}`,
@@ -85,15 +86,21 @@ export function generateMockAIEvaluation(submissionId: string, text: string): Ev
     correctedText,
     mistakes: sampleMistakes,
     scores: {
-      grammar: grammarScore,
-      vocabulary: vocabScore,
-      spellingPunctuation: spellingScore,
-      coherenceCohesion: coherenceScore,
-      taskAchievement: taskScore,
-      overallGrade: overall
+      content: contentScore,
+      communicativeAchievement: commScore,
+      organisation: orgScore,
+      language: langScore,
+      totalMarks,
+      overallGrade,
+      // Legacy compat
+      grammar: +(langScore * 2).toFixed(1),
+      vocabulary: +(langScore * 2).toFixed(1),
+      spellingPunctuation: 8.5,
+      coherenceCohesion: +(orgScore * 2).toFixed(1),
+      taskAchievement: +(contentScore * 2).toFixed(1),
     },
-    suggestedOverallGrade: overall,
-    generalFeedback: `The essay demonstrates a clear communicative intention with ${wordCount} words. Ideas are structured logically across paragraphs. Key focus points: revise subject-verb agreement and formal vocabulary connectors to elevate the overall lexical level.`,
+    suggestedOverallGrade: overallGrade,
+    generalFeedback: `The writing demonstrates a clear communicative intention with ${wordCount} words. Ideas are structured logically across paragraphs. Key focus points: revise subject-verb agreement and formal vocabulary connectors to elevate the overall lexical level according to Cambridge marking standards.`,
     recommendations: [
       'Expand connective phrases for smoother transitions between paragraphs (e.g. "Consequently", "On the other hand").',
       'Proofread carefully for subject-verb concord with complex or gerund subjects.',
@@ -101,7 +108,7 @@ export function generateMockAIEvaluation(submissionId: string, text: string): Ev
     ],
     aiConfidence: 94,
     reviewedByTeacher: false,
-    teacherNotes: 'Evaluación preliminar generada por IA. Pendiente de validación y ajuste docente.',
+    teacherNotes: 'Preliminary AI evaluation. Pending teacher review and grading validation.',
     updatedAt: new Date().toISOString()
   };
 }
